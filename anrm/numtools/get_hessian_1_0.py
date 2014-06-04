@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 from anrm.irvin_mod_v5_tester import model
 
 #----Experiment Name--------
-Exp_name = ('CompII_Hyp_123_newtopology_Apop1_Apop2')
+Exp_name = ('CompII_Hyp_123_newtopology_Apop1')
 
 #----Experimental Data----
 """
