@@ -10,10 +10,10 @@ import simulator_1_0 as sim
 import bayes_mcmc as bmc
 import matplotlib.pyplot as plt
 
-from anrm.irvin_mod_v5_tester import model
+from anrm.irvin_mod_v5_wo_po4bid import model
 
 #----Experiment Name--------
-Exp_name = ('CompII_Hyp_123_Apop1_Apop2_Necr1')
+Exp_name = ('CompII_Hyp_123_Bid_Hyp_0_Apop1_Apop2_Necr1')
 print Exp_name
 
 #----Data and conditions----
@@ -41,7 +41,7 @@ init_conc = {'Apop1':{'TNFa_0': 600}, 'Apop2':{'TNFa_0': 1200}, 'Necr1':{'TNFa_0
     step:
 """
 #-----------Previously Calibrated Parameters------------
-initial_position = pickle.load(open('CompII_Hypthesis_123_newtopology_1run_v4_Position.pkl'))
+initial_position = pickle.load(open('CompII_Hyp_123_Bid_Hyp0_newtopology_1run_v4_Position.pkl'))
 
 #----User Defined Functions-----
 def ydata_fn():
