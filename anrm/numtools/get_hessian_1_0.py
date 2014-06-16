@@ -17,7 +17,6 @@ Exp_name = ('CompII_Hyp_123_Apop2')
 print Exp_name
 
 #----Data and conditions----
-ydata = ydata_fn()
 #init_conc = {'Apop1':{'TNFa_0': 600}}
 init_conc = {'Apop2':{'TNFa_0': 1200}}
 #init_conc = {'Necr1':{'TNFa_0':1800, 'zVad_0':9.6e6, 'FADD_0':0}}
