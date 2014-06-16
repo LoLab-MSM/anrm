@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 from anrm.irvin_mod_v5_tester import model
 
 #----Experiment Name--------
-Exp_name = ('CompII_Hyp_123_Apop1_Apop2')
+Exp_name = ('CompII_Hyp_123_Apop1_Apop2_Necr1')
 print Exp_name
 
 #----Data and conditions----
