@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 from anrm.irvin_mod_v5_wo_po4bid import model
 
 #----Experiment Name--------
-Exp_name = ('CompII_Hyp_123_newtopology_wo_po4Bid_Apop1')
+Exp_name = ('CompII_Hyp_123_Apop1')
 
 #----Experimental Data----
 """
@@ -116,12 +116,12 @@ def prior(mcmc, position):
 
 #----Data and conditions----
 ydata = ydata_fn()
-#init_conc = {'Apop1':{'TNFa_0': 600}}
+init_conc = {'Apop1':{'TNFa_0': 600}}
 #init_conc = {'Apop2':{'TNFa_0': 1200}}
 #init_conc = {'Necr1':{'TNFa_0':1800, 'zVad_0':9.6e6, 'FADD_0':0}}
 
 #init_conc = {'Apop2':{'TNFa_0': 1200}, 'Necr1':{'TNFa_0':1800, 'zVad_0':9.6e6, 'FADD_0':0}}
-init_conc = {'Apop1':{'TNFa_0': 600}, 'Apop2':{'TNFa_0': 1200}}
+#init_conc = {'Apop1':{'TNFa_0': 600}, 'Apop2':{'TNFa_0': 1200}}
 #init_conc = {'Apop1':{'TNFa_0': 600}, 'Apop2':{'TNFa_0': 1200}, 'Necr1':{'TNFa_0':1800, 'zVad_0':9.6e6, 'FADD_0':0}} #600 = 10ng/ml TNFa, 9.6e6 = 20uM
 
 
