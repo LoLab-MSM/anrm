@@ -141,8 +141,6 @@ sims.atol = 1e-5
 solve = sim.Solver(sims)
 solve.run()
 
-
-
 #----Bayesian and MCMC Options----
 opts = bmc.MCMCOpts()
 opts.nsteps = 3000

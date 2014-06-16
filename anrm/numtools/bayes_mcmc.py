@@ -464,6 +464,7 @@ class MCMC(object):
         hessian = np.empty((self.num_estimate, self.num_estimate))
         # iterate over diagonal
         for i in range(self.num_estimate):
+            print "calculating theta_%s, theta_%s" % (i, i)
             position_f = position.copy()
             position_b = position.copy()
             position_f[i] += d
@@ -475,6 +476,7 @@ class MCMC(object):
         # iterate over elements above diagonal
         for i in range(self.num_estimate-1):
             for j in range(i + 1, self.num_estimate):
+                print "calculating theta_%s, theta_%s" % (i, j)
                 position_ff = position.copy()
                 position_fb = position.copy()
                 position_bf = position.copy()

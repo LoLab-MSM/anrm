@@ -61,6 +61,7 @@ class Settings():
     def copy(self):
         new_options = Settings()
         new_options.__dict__.update(self.__dict__)
+        print new_options
         return new_options
 
 class Solver(object):

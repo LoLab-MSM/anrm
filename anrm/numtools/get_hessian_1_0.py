@@ -10,10 +10,10 @@ import simulator_1_0 as sim
 import bayes_mcmc as bmc
 import matplotlib.pyplot as plt
 
-from anrm.irvin_mod_v5_tester import model
+from anrm.irvin_mod_v5_wo_po4bid import model
 
 #----Experiment Name--------
-Exp_name = ('CompII_Hyp_123_newtopology_Apop1_Apop2')
+Exp_name = ('CompII_Hyp_123_newtopology_wo_po4Bid_Apop1')
 
 #----Experimental Data----
 """
@@ -170,6 +170,6 @@ mcmc.num_estimate = len(opts.initial_values)
 mcmc.position = initial_position
 hess = mcmc.calculate_hessian()
 
-pickle.dump(mcmc.position, open('pysb_hessian_%s.pkl' % Exp_name, 'wb'))
+pickle.dump(hess, open('pysb_hessian_%s.pkl' % Exp_name, 'wb'))
 
 
