@@ -2,7 +2,7 @@
 # of caspase reporters.
 
 import pickle
-import plot as bp
+import bayessb
 import random as ra 
 import numpy as np
 import calibratortools as ct
@@ -92,6 +92,32 @@ def step(mcmc):
             (mcmc.iter, mcmc.sig_value, mcmc.T, float(mcmc.acceptance)/(mcmc.iter+1),
              mcmc.accept_likelihood, mcmc.accept_prior, mcmc.accept_posterior)
 
+def prediction(mcmc, n, species_idx, pred_k, readout, ynorm, plot_samples=False):
+    plt.figure()
+    positions = mcmc.positions[-n:]
+    accepts = mcmc.accepts[-n:]
+    accept_positions = positions[accepts]
+    tspan = sims.tspan
+    ysamples = np.empty((len(accept_positions), len(tspan)))
+    for i, pos in enumerate(accept_positions):
+        ysim = solve.simulate(pos, observables = True, initial_conc=conditions[pred_k])
+        ysamples[i] = ct.extract_records(ysim, readout).T
+    ysamples = ysamples/ysamples.max()
+    #ysamples[i] = ysim[:, species_idx] / ysim[:, species_idx].max()
+    ymean = np.mean(ysamples, 0)
+    ystd = np.std(ysamples, 0)
+    
+    if plot_samples:
+        for y in ysamples:
+            plt.plot(tspan, y, c='gray', alpha=.01)
+
+    plt.plot(tspan, ymean, 'b:', linewidth=2)
+    std_interval = ystd[:, None] * [+1, -1]
+    plt.plot(tspan, ymean[:, None] + std_interval * 0.842, 'g-.', linewidth=2)
+    plt.plot(tspan, ymean[:, None] + std_interval * 1.645, 'k-.', linewidth=2)
+    plt.errorbar(ynorm[0][:,0]*3600, ynorm[0][:,1], yerr = ynorm[0][:,2], fmt = None, ecolor = 'blue')
+    plt.xlim(tspan[0] - 1, tspan[-1] + 1)
+
 #----Normalize--------------
 ydata = ydata_fn()
 ydata_norm = ydata.copy()
@@ -119,7 +145,7 @@ solve.run()
 
 #----Bayesian and MCMC Options----
 opts = bmc.MCMCOpts()
-opts.nsteps = 1
+opts.nsteps = 10
 opts.initial_values = np.power(10, initial_position)
 #opts.initial_values = solve.initial_values
 opts.likelihood_fn = objective_fn
@@ -139,75 +165,19 @@ prior_var = 6.0
 mcmc = bmc.MCMC(opts)
 mcmc.run()
 
-#Two largest eigenvector components in the largest eigenvalue in the model with Bid-po4
-parameter_list = [p.name for p in solve.options.estimate_params]
-pname0 = 'TNFR1_FADD_kc_2' #evc = +65, ev 5915
-pname1 = 'k5' #evc = +18, ev = 8756.923426
-b0 = (-5, 1)
-b1 = (-9, -3)
-gs = 20
-experiment ='CompII_Hypthesis_123_newtopology_2run_v40'
-dim0 = parameter_list.index(pname0)
-dim1 = parameter_list.index(pname1)
+mixed_nsteps = opts.nsteps / 2
+mixed_positions = mcmc.positions[-mixed_nsteps:]
+mixed_accepts = mcmc.accepts[-mixed_nsteps:]
+mixed_accept_positions = mixed_positions[mixed_accepts]
+marginal_mean_pos = np.mean(mixed_accept_positions, 0)
+
+random = np.random.RandomState(opts.seed)
+sigma = 0.1;
+ntimes = 20;
+pred_k = 'Apop2'
+yout = ['Obs_cPARP']
 
 # show prediction for C trajectory, which was not fit to
-bp.surf(mcmc, dim0, dim1, experiment, mask=True, walk=True, rejects=True, step=1,
-     square_aspect=True, margin=0.1, bounds0 = b0, bounds1 = b1, zmin=None,
-     zmax=None, position_base=initial_position, parallelize=False, gridsize=gs)
-
-"""
-Display the posterior of an MCMC walk on a 3-D surface.
-    
-Parameters
-----------
-mcmc : bayessb.MCMC
-    MCMC object to display.
-dim0, dim1 : indices of parameters to display
-mask : bool/int, optional
-    If True (default) the annealing phase of the walk will be discarded
-    before plotting. If False, nothing will be discarded and all points will
-    be plotted. If an integer, specifies the number of steps to be discarded
-    from the beginning of the walk.
-walk : bool, optional
-    If True (default) render the walk positions. If False, do not render it.
-    rejects : bool, optional
-    If True (default) render each rejected position with an 'X'. If False,
-    do not render them.
-step : int, optional
-    Render every `step`th positions along the walk. Defaults to 1 (render
-    all positions). Useful to improve performance with very long walks.
-square_aspect : bool, optional
-    If True (default) the X and Y scales of the plot will be equal, allowing
-    for direct comparison of moves in the corresponding parameter axes. If
-    False the scales will auto-adjust to fit the data tightly, allowing for
-    visualization of the full variance along both axes.
-margin : float, optional
-    Fraction of the X and Y ranges to add as padding to the surface, beyond
-    the range of the points in the walk. Defaults to 0.1. Negative values
-    are allowed.
-    bounds0, bounds1 : array-like, optional
-    Explicit ranges (min, max) for X and Y axes. Specifying either disables
-    `square_aspect`.
-zmin, zmax : float, optional
-    Max/min height (posterior value) for the sampled surface, and the limits
-    for the Z axis of the plot. Any surface points outside this range will
-    not be rendered. Defaults to the actual range of posterior values from
-    the walk and the sampled surface.
-position_base : array-like, optional
-    Vector in log10-parameter space providing values for dimensions *other*
-    than dim0/dim1 when calculating the posterior surface (values at
-    position dim0 and dim1 will be ignored). Defaults to the median of all
-    positions in the walk.
-parallelize : bool, optional
-    If True (default), use the multiprocessing module to calculate the
-    posterior surface in parallel using all available CPU cores. If False,
-    do not parallelize.
-gridsize : int, optional
-    Number of points along each axis at which to sample the posterior
-    surface. The total number of samples will be `gridsize`**2. Defaults to
-    20. Increasing this value will produce a smoother posterior surface at
-    the expense of more computational time.
-    """
-
-
+prediction(mcmc, opts.nsteps / 2, 2, pred_k, yout, ydata_norm[pred_k], plot_samples=True)
+plt.show()
 

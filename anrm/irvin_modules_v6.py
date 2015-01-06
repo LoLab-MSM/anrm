@@ -104,18 +104,19 @@ def TNFa_to_ComplexI():
     """
     bind(TNFa(brec = None),'brec', TNFR1(blig = None), 'blig', [1e-6, 1e-3])
     bind(TNFR1(blig = ANY, bDD = None), 'bDD', TRADD(bDD1 = None, bDD2 = None), 'bDD1', [1e-6, 1e-3])
+    bind_complex(TNFR1(blig = ANY, bDD = ANY)%TRADD(bDD1 = ANY, bDD2 = None), 'bDD2', RIP1(bDD = None, btraf = None, state =  'unmod'), 'bDD', [1e-6, 1e-3])
+    bind_complex(TNFR1(blig =  ANY, bDD = ANY)%TRADD(bDD1 = ANY, bDD2 = ANY)%RIP1(bDD = ANY, btraf = None, state =  'unmod'), 'btraf', TRAF(brip=None), 'brip', [1e-6, 1e-3])
     #we need to get bind_complex working!
-    Rule('RIP1_to_complex1', TNFR1(blig = ANY, bDD = ANY)%TRADD(bDD1 = ANY, bDD2 = None) + RIP1(bDD = None, btraf = None, state =  'unmod') <> TNFR1(blig = ANY, bDD = ANY)%TRADD(bDD1 = ANY, bDD2 = 1)%RIP1(bDD = 1, btraf = None, state =  'unmod'), Parameter('k1', 1e-6),Parameter('k2',1e-3))
-    Rule('TRAF_to_complex1', TNFR1(blig =  ANY, bDD = ANY)%TRADD(bDD1 = ANY, bDD2 = ANY)%RIP1(bDD = ANY, btraf = None, state =  'unmod') + TRAF(brip=None) <> TNFR1(blig =  ANY, bDD = ANY)%TRADD(bDD1 = ANY, bDD2 = ANY)%RIP1(bDD = ANY, btraf = 1, state =  'unmod')%TRAF(brip=1), Parameter('k3', 1e-6), Parameter('k4',1e-3))
     bind(TRAF(bciap =  None), 'bciap', cIAP(btraf = None), 'btraf', [1e-6, 1e-3])
     bind(TRAF(zfinger =  None), 'zfinger', CYLD(btraf = None), 'btraf', [1e-6, 1e-3])
     
     ComplexI = TNFa(brec = ANY)%TNFR1(blig =  ANY, bDD = ANY)%TRADD(bDD1 = ANY, bDD2 = ANY)
     
+    #No one step conversions with complexes
     Rule('RIP1_Ubiquitination', ComplexI %RIP1(bDD = ANY, btraf = ANY, state =  'unmod')%TRAF(brip = ANY, bciap = ANY) >> ComplexI %RIP1(bDD = ANY, btraf = None, state =  'ub')%TRAF(brip = ANY, bciap = ANY), Parameter('RIP1_ubiq_kc', 1e-1))
     Rule('RIP1_Deubiquitination', ComplexI%RIP1(bDD = ANY, btraf = ANY, state =  'ub')%TRAF(brip = ANY, zfinger = ANY) >> ComplexI%RIP1(bDD = ANY, btraf = None, state =  'unmod')%TRAF(brip = ANY, zfinger = ANY), Parameter('RIP1_deub_kc', 1e-1))
-    Rule('Establish_NFkB_Signaling_Complex', ComplexI%RIP1(bDD = ANY, btraf = ANY, state =  'ub')%TRAF(brip = ANY, bciap = ANY) >> NSC(bnfkb=None), Parameter('NSC_esta_kc', 1e-8))
     Rule('RIP1_Degradation', ComplexI%RIP1(bDD = ANY, btraf = ANY, state =  'ub')%TRAF(brip = ANY) >> ComplexI + TRAF(brip = None), Parameter('RIP1_degr_kc', 1e-1))
+    Rule('Establish_NFkB_Signaling_Complex', ComplexI%RIP1(bDD = ANY, btraf = ANY, state =  'ub')%TRAF(brip = ANY, bciap = ANY) >> NSC(bnfkb=None), Parameter('NSC_esta_kc', 1e-8))
 
 def CompI_TRADD_RIP1_Dissociation():
     """Some believe that TRADD, RIP1 and others are released into the cytoplasm after RIP1 deubiquitination or after TNFR endocytosis. This mechanism presents a problem: The RIP1 released into the cytoplasm is in theory the same as RIP1 that existed in the cytoplasm prior to TNF stimulation. Meaning apoptosis whould spontaneously occur. Dissociation of TRADD:RIP1 from complex I is a hypothetical pathway that could distinguish pre- and post- TNF RIP1. It could also serve as a mechanism for FADD independent necrosome formation. This hypothesis is supported by a suggested mechanism, to explain signal transduction from TNFa to Riptosome formation[1]. 
@@ -123,10 +124,9 @@ def CompI_TRADD_RIP1_Dissociation():
         TNFa:TNFR1:TRADD:RIP1(unmod) <> TNFa:TNFR1 + TRADD:RIP1(unmod)
         
         1. Dickens, LS., IR Powley, MA Hughes, M MacFarlane, Exp. Cell. Res. 318 (2012) 1269-1277"""
-    
-    Rule('RIP1_TRADD_Complex1', TNFa(brec = ANY)%TNFR1(blig =  ANY, bDD = None) + TRADD(bDD1 = None, bDD2 = ANY)%RIP1(bDD = ANY, state =  'unmod') <> TNFa(brec = ANY)%TNFR1(blig =  ANY, bDD = 1)%TRADD(bDD1 = 1, bDD2 = ANY)%RIP1(bDD = ANY, state =  'unmod'), Parameter('k5', 1e-6),Parameter('k6',1e-3))
+    bind_complex(TNFa(brec = ANY)%TNFR1(blig =  ANY, bDD = None), 'bDD', TRADD(bDD1 = None, bDD2 = ANY)%RIP1(bDD = ANY, state =  'unmod'), 'bDD1', [1e-6, 1e-3])
 
-def CompII_Hypothesis_1():
+def CompII_Hypothesis_1_FADD_CompI_interaction():
     """Michaeu and Tschopp, showed that FADD is absent from Complex I[1]. The presence of TRADD in Complex II is debated [2]. As explained in CompI_TRADD_RIP1_Dissociation(), simply releasing RIP1 from Complex I so that it can bind FADD creates a condition where cell death spontaneously occurs. Here, I hypothesize that FADD transiently associates with Complex I in order to retrieve RIP1 from Complex I. This association, being transient, would have been difficult to detect.
         
         1. Olivier Micheau, Jurg Tschopp, Induction of TNF Receptor I-Mediated Apoptosis via Two Sequential Signaling Complexes, Cell, Volume 114, Issue 2, 25 July 2003, Pages 181-190
@@ -137,17 +137,17 @@ def CompII_Hypothesis_1():
     
     Rule('TNFR1_to_FADD_2', TNFR1(bDD = 2)%TRADD(bDD1 = 2, bDD2 = 3)%RIP1(bDD = 3, btraf = None)+ FADD(bDD = None)>> TNFR1(bDD = 2)%TRADD(bDD1 = 2, bDD2 = None) + RIP1(bDD = 1, btraf = None)%FADD(bDD = 1), Parameter('TNFR1_FADD_kc_2', 1e-1))
 
-def CompII_Hypothesis_2():
+def CompII_Hypothesis_2_FADD_displaces_TRADD():
     """Dickens et al, speculated that TRADD:RIP1 is released into the cytoplasm following RIP1 deubiquitination by CYLD[1]. Furter, Dinckens question presence of TRADD in Complex II[1], but it is established that Complex II is contains FADD. To model these findings, we suggest that FADD replaces the TRADD in the cytoplasmic TRADD:RIP1 complex. """
         
     Rule('TRADD_to_FADD_1', TRADD(bDD1 = None, bDD2 = 2)%RIP1(bDD = 2)%TRAF(brip = 3) + FADD(bDD = None)>> TRADD(bDD1 = None, bDD2 = None) + RIP1(bDD = 1)%FADD(bDD = 1) + TRAF(brip = None), Parameter('TRADD_FADD_kc_1', 1e-1))
     
     Rule('TRADD_to_FADD_2', TRADD(bDD1 = None, bDD2 = 2)%RIP1(bDD = 2, btraf = None)+ FADD(bDD = None)>> TRADD(bDD1 = None, bDD2 = None) + RIP1(bDD = 1, btraf = None)%FADD(bDD = 1), Parameter('TRADD_FADD_kc_2', 1e-1))
 
-def CompII_Hypothesis_3():
+def CompII_Hypothesis_3_FADD_binds_TRADD():
     """Dickens et al, speculated that TRADD:RIP1 is released into the cytoplasm following RIP1 deubiquitination by CYLD[1]. FADD is recruited to RIP1 to form a cytoplasmic complex II. The presence of TRADD in complex II is debated. Here, we hypothesize that it is present. """
     
-    Rule('TRADD_to_FADD_3', FADD(bDD = None) + TRADD(bDD1 = None, bDD2 = ANY)%RIP1(bDD = ANY, btraf = None) <> FADD(bDD = 1)%TRADD(bDD1 = 1, bDD2 = ANY)%RIP1(bDD = ANY, btraf = None), Parameter('TRADD_FADD_kf', 1e-1), Parameter('TRADD_FADD_kr', 1e-1))
+    bind_complex(FADD(bDD = None), 'bDD', TRADD(bDD1 = None, bDD2 = ANY)%RIP1(bDD = ANY, btraf = None), 'bDD1', [1e-1, 1e-1])
     
 def ComplexII_to_Bid_Monomers():
     """ Bid is declared in Albeck Modules"""
@@ -195,7 +195,7 @@ def ComplexIIa_Assembly():
 
     # ----------procaspase8 and cFlip recruitment-----
     bind(FADD(bDD = ANY, bDED1 = None),'bDED1', proC8(bDED = None), 'bDED', [7.27e-06, 0.018]) # (J Immunol 2005)
-    Rule('bind_FADD_proC8_2', FADD(bDD = ANY, bDED2 = None) + proC8(bDED = None) <> FADD(bDD = ANY, bDED2 = 1)%proC8(bDED = 1), Parameter('bind_FADD_proC8_2_kf', 7.27e-06), Parameter('bind_FADD_proC8_2_kr', 0.018)) # (J Immunol 2005) FIX: Bind function fails when one molecule can bind another at more than one binding site. The failure occurs because _rule_name_generic does not distinguish between binding sites.
+    Rule('bind_FADD_proC8_2', FADD(bDD = ANY, bDED2 = None) + proC8(bDED = None) <> FADD(bDD = ANY, bDED2 = 1)%proC8(bDED = 1), Parameter('bind_FADD_proC8_2_kf', 7.27e-06), Parameter('bind_FADD_proC8_2_kr', 0.018)) # (J Immunol 2005) FIX: Bind function fails when one molecule can bind another at more than one binding site. The failure occurs because _rule_name_generic does not distinguish between binding sites. NAMING MACRO SHOULD number repeated names. 
     
     bind(FADD(bDD = ANY, bDED1 = None),'bDED1', flip_L(bDED = None), 'bDED', [7.27e-05, 0.018]) # (J Immunol 2005)
     Rule('bind_FADD_flip_L_2', FADD(bDD = ANY, bDED2 = None) + flip_L(bDED = None) <> FADD(bDD = ANY, bDED2 = 1)%flip_L(bDED = 1), Parameter('bind_FADD_flip_L_2_kf', 7.27e-06), Parameter('bind_FADD_flip_L_2_kr', 0.018)) # (J Immunol 2005)[...source] says cFlip-L has greater affinity for proC8 than proC8 itself.
@@ -215,20 +215,15 @@ def ComplexIIb_to_MLKL():
 
 def RIP1_truncation_ComplexII():
     #Flip_L:proC8 mediated RIP1 truncation
-    Rule('RIP1_trunc_1a', RIP1(bDD = None, state = 'unmod') + FADD(bDD = None, bDED1 = ANY, bDED2 = ANY)%flip_L(bDED=ANY)%proC8(bDED=ANY) <> RIP1(bDD = 1, state = 'unmod')%FADD(bDD = 1, bDED1 = ANY, bDED2 = ANY)%flip_L(bDED=ANY)%proC8(bDED=ANY), Parameter('RIP1_trunc_kcf1', 1e-6), Parameter('RIP1_trunc_kcr1', 1e-3))
-
-    Rule('RIP1_trunc_1b', RIP1(bDD = 1, state = 'unmod')%FADD(bDD = 1, bDED1 = ANY, bDED2 = ANY)%flip_L(bDED=ANY)%proC8(bDED=ANY) >> RIP1(bDD = None, state = 'trunc') + FADD(bDD = None, bDED1 = ANY, bDED2 = ANY)%flip_L(bDED=ANY)%proC8(bDED=ANY), Parameter('RIP1_trunc_kc1', 1e-1))
-
-    Rule('RIP1_trunc_2a', RIP1(bDD = None, state = 'unmod') + TRADD(bDD1 = 2, bDD2 = None)%FADD(bDD = 2, bDED1 = ANY, bDED2 = ANY)%flip_L(bDED=ANY)%proC8(bDED=ANY) <> RIP1(bDD = 1, state = 'unmod')%TRADD(bDD1 = 2, bDD2 = 1)%FADD(bDD = 2, bDED1 = ANY, bDED2 = ANY)%flip_L(bDED=ANY)%proC8(bDED=ANY), Parameter('RIP1_trunc_kcf2', 1e-6), Parameter('RIP1_trunc_kcr2', 1e-3))
-
-    Rule('RIP1_trunc_2b', RIP1(bDD = ANY, state = 'unmod')%TRADD(bDD1 = ANY, bDD2 = ANY)%FADD(bDD = ANY, bDED1 = ANY, bDED2 = ANY)%flip_L(bDED=ANY)%proC8(bDED=ANY) >> RIP1(bDD = None, state = 'trunc') + TRADD(bDD1 = ANY, bDD2 = None)%FADD(bDD = ANY, bDED1 = ANY, bDED2 = ANY)%flip_L(bDED=ANY)%proC8(bDED=ANY), Parameter('RIP1_trunc_kc2', 1e-1))
+    catalyze_complex(FADD(bDD = None, bDED1 = ANY, bDED2 = ANY)%flip_L(bDED=ANY)%proC8(bDED=ANY), 'bDD', RIP1(bDD = None, state = 'unmod'), 'bDD', RIP1(bDD = None, state = 'trunc'), [1e-6, 1e-3, 1e-1])
+    catalyze_complex(TRADD(bDD1 = 2, bDD2 = None)%FADD(bDD = 2, bDED1 = ANY, bDED2 = ANY)%flip_L(bDED=ANY)%proC8(bDED=ANY), 'bDD2', RIP1(bDD = None, state = 'unmod'), 'bDD', RIP1(bDD = None, state = 'trunc'), [1e-6, 1e-3, 1e-1])
 
     #proC8:proC8 mediated RIP1 truncation
-    Rule('RIP1_trunc_3a', RIP1(bDD = None, state = 'unmod') + FADD(bDD = None, bDED1 = 2, bDED2 = 3)%proC8(bDED=2)%proC8(bDED=3) <> RIP1(bDD = 1, state = 'unmod')%FADD(bDD = 1, bDED1 = 2, bDED2 = 3)%proC8(bDED=2)%proC8(bDED=3), Parameter('RIP1_trunc_kcf3', 1e-6), Parameter('RIP1_trunc_kcr3', 1e-3))
-
+    bind_complex(FADD(bDD = None, bDED1 = 2, bDED2 = 3)%proC8(bDED=2)%proC8(bDED=3), 'bDD', RIP1(bDD = None, state = 'unmod'), 'bDD', [1e-6, 1e-3])
+    
     Rule('RIP1_trunc_3b', RIP1(bDD = ANY, state = 'unmod')%FADD(bDD = ANY, bDED1 = ANY, bDED2 = ANY)%proC8(bDED=ANY)%proC8(bDED=ANY) >> RIP1(bDD = None, state = 'trunc') + FADD(bDD = None, bDED1 = None, bDED2 = None) + C8(bf = None, state = 'A'), Parameter('RIP1_trunc_kc3', 1e-1))
-
-    Rule('RIP1_trunc_4a', RIP1(bDD = None, state = 'unmod') + TRADD(bDD1 = 2, bDD2 = None)%FADD(bDD = 2, bDED1 = 3, bDED2 = 4)%proC8(bDED=3)%proC8(bDED=4) <> RIP1(bDD = 1, state = 'unmod')%TRADD(bDD1 = 2, bDD2 = 1)%FADD(bDD = 2, bDED1 = 3, bDED2 = 4)%proC8(bDED=3)%proC8(bDED=4), Parameter('RIP1_trunc_kcf4', 1e-6), Parameter('RIP1_trunc_kcr4', 1e-3))
+    
+    bind_complex(TRADD(bDD1 = 2, bDD2 = None)%FADD(bDD = 2, bDED1 = 3, bDED2 = 4)%proC8(bDED=3)%proC8(bDED=4), 'bDD2', RIP1(bDD = None, state = 'unmod'), 'bDD', [1e-6, 1e-3])
 
     Rule('RIP1_trunc_4b', RIP1(bDD = ANY, state = 'unmod')%TRADD(bDD1 = ANY, bDD2 = ANY)%FADD(bDD = ANY, bDED1 = ANY, bDED2 = ANY)%proC8(bDED=ANY)%proC8(bDED=ANY) >> RIP1(bDD = None, state = 'trunc') + TRADD(bDD1 = ANY, bDD2 = None)%FADD(bDD = ANY, bDED1 = None, bDED2 = None)+ C8(bf = None, state = 'A'), Parameter('RIP1_trunc_kc4', 1e-1))
 
@@ -342,8 +337,7 @@ def Bid_Hypothesis_2():
 
     #-------------Bid Interactions--------------------------
     # Bid Phosphorylation and Truncation
-    bind(BidK(bf = None), 'bf', Bid(bf = None, state = 'U'), 'bf', [1e-6, 1e-3])
-    Rule('Bid_phophorylation', BidK(bf =  ANY)%Bid(bf = ANY, state = 'U') >> BidK(bf = None) + Bid_po4(bf1 =  None, bf2 =  None, bf3 = None), Parameter('kc_Bid_po4', 1e-1))
+    catalyze(BidK(bf = None), 'bf', Bid(state = 'U'), 'bf', Bid_po4(bf1 =  None, bf2 =  None, bf3 = None),[1e-6, 1e-3, 1e-1])
 
     Rule('CompII_to_Bid1', FADD(bDED1=1, bDED2=2)%flip_L(bDED=1)%proC8(bDED=2) + Bid_po4(bf1 = None, bf2 = None, bf3 = None) >> Bid_po4(bf1 = 1, bf2 = 2, bf3 = None)%flip_L(bDED=1)%proC8(bDED=2) + FADD(bDED1 = None, bDED2 = None), Parameter('kc_BidHypothesis_1', 1e-1))
          

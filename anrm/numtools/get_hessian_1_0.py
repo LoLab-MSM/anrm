@@ -41,7 +41,7 @@ init_conc = {'Apop2':{'TNFa_0': 1200}}
     step:
 """
 #-----------Previously Calibrated Parameters------------
-initial_position = pickle.load(open('CompII_Hyp_123_newtopology_1run_v4_Position.pkl'))
+initial_position = pickle.load(open('CompII_Hypotheis_123_newtopology_1run_v4_Position.pkl'))
 
 #----User Defined Functions-----
 def ydata_fn():

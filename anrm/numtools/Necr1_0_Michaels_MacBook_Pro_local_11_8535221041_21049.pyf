@@ -1,0 +1,1467 @@
+python module Necr1_0_Michaels_MacBook_Pro_local_11_8535221041_21049
+interface
+    subroutine res_function(time, dynamicVars, yprime, cj, residual, ires, constants, ipar) 
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(hide) :: cj
+        double precision intent(out), dimension(799) :: residual
+        integer intent(hide) :: ires
+        double precision intent(in), dimension(194) :: constants
+        integer intent(hide), dimension(2) :: ipar
+    end subroutine res_function
+    subroutine ddaskr_jac(t,y,yprime,pd,cj,constants,ipar)
+        double precision intent(in) :: t
+        double precision intent(in), dimension(799) :: y
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(out), dimension(799, 799) :: pd
+        double precision intent(in) :: cj
+        double precision intent(in), dimension(194) :: constants
+        ! This has been set equal to (neq, len(rpar)) in the daskr call
+        integer dimension(2), intent(hide) :: ipar
+    end subroutine ddaskr_jac
+    subroutine root_func(neq,t,y,yp,nrt,root_devs,constants,ipar)
+        integer intent(hide) :: neq
+        double precision intent(in) :: t
+        double precision intent(in), dimension(799) :: y
+        double precision intent(in), dimension(799) :: yp
+        integer intent(hide) :: nrt
+        double precision intent(out), dimension(0) :: root_devs
+        double precision intent(in), dimension(194) :: constants
+        ! This has been set equal to (neq, len(rpar)) in the daskr call
+        integer dimension(2), intent(hide) :: ipar
+    end subroutine root_func
+    subroutine alg_deriv_func(alg_yp, dynamicVars, yp, time, constants, alg_derivs_res)
+        double precision intent(in), dimension(0) :: alg_yp
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yp
+        double precision intent(in) :: time
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(0) :: alg_derivs_res
+    end subroutine alg_deriv_func
+    subroutine alg_res_func(alg_vals, dynamicVars, time, constants, residual) 
+        double precision intent(in), dimension(0) :: alg_vals
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in) :: time
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(0) :: residual
+    end subroutine alg_res_func
+    subroutine dres_dc_function(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799, 799) :: pd
+    end subroutine dres_dc_function
+    subroutine dres_dcdot_function(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799, 799) :: pd
+    end subroutine dres_dcdot_function
+    subroutine dres_dbind_TNFa_TNFR1_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_TNFa_TNFR1_kf
+    subroutine dres_dbind_TNFa_TNFR1_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_TNFa_TNFR1_kr
+    subroutine dres_dbind_TNFR1ANY_TRADD_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_TNFR1ANY_TRADD_kf
+    subroutine dres_dbind_TNFR1ANY_TRADD_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_TNFR1ANY_TRADD_kr
+    subroutine dres_dk1(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dk1
+    subroutine dres_dk2(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dk2
+    subroutine dres_dk3(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dk3
+    subroutine dres_dk4(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dk4
+    subroutine dres_dbind_TRAF_cIAP_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_TRAF_cIAP_kf
+    subroutine dres_dbind_TRAF_cIAP_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_TRAF_cIAP_kr
+    subroutine dres_dbind_TRAF_CYLD_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_TRAF_CYLD_kf
+    subroutine dres_dbind_TRAF_CYLD_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_TRAF_CYLD_kr
+    subroutine dres_dRIP1_ubiq_kc(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dRIP1_ubiq_kc
+    subroutine dres_dRIP1_deub_kc(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dRIP1_deub_kc
+    subroutine dres_dNSC_esta_kc(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dNSC_esta_kc
+    subroutine dres_dRIP1_degr_kc(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dRIP1_degr_kc
+    subroutine dres_dk5(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dk5
+    subroutine dres_dk6(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dk6
+    subroutine dres_dTNFR1_FADD_kc_1(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dTNFR1_FADD_kc_1
+    subroutine dres_dTNFR1_FADD_kc_2(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dTNFR1_FADD_kc_2
+    subroutine dres_dTRADD_FADD_kc_1(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dTRADD_FADD_kc_1
+    subroutine dres_dTRADD_FADD_kc_2(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dTRADD_FADD_kc_2
+    subroutine dres_dTRADD_FADD_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dTRADD_FADD_kf
+    subroutine dres_dTRADD_FADD_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dTRADD_FADD_kr
+    subroutine dres_dbind_FADDANY_proC8_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_FADDANY_proC8_kf
+    subroutine dres_dbind_FADDANY_proC8_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_FADDANY_proC8_kr
+    subroutine dres_dbind_FADD_proC8_2_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_FADD_proC8_2_kf
+    subroutine dres_dbind_FADD_proC8_2_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_FADD_proC8_2_kr
+    subroutine dres_dbind_FADDANY_flip_L_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_FADDANY_flip_L_kf
+    subroutine dres_dbind_FADDANY_flip_L_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_FADDANY_flip_L_kr
+    subroutine dres_dbind_FADD_flip_L_2_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_FADD_flip_L_2_kf
+    subroutine dres_dbind_FADD_flip_L_2_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_FADD_flip_L_2_kr
+    subroutine dres_dbind_FADDANY_flip_S_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_FADDANY_flip_S_kf
+    subroutine dres_dbind_FADDANY_flip_S_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_FADDANY_flip_S_kr
+    subroutine dres_dbind_FADD_flip_S_2_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_FADD_flip_S_2_kf
+    subroutine dres_dbind_FADD_flip_S_2_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_FADD_flip_S_2_kr
+    subroutine dres_dbind_RIP1ANYunmod_RIP3unmod_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_RIP1ANYunmod_RIP3unmod_kf
+    subroutine dres_dbind_RIP1ANYunmod_RIP3unmod_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_RIP1ANYunmod_RIP3unmod_kr
+    subroutine dres_dk19(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dk19
+    subroutine dres_dk20(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dk20
+    subroutine dres_dbind_RIP1po4_MLKLunmod_to_RIP1po4MLKLunmod_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_RIP1po4_MLKLunmod_to_RIP1po4MLKLunmod_kf
+    subroutine dres_dbind_RIP1po4_MLKLunmod_to_RIP1po4MLKLunmod_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_RIP1po4_MLKLunmod_to_RIP1po4MLKLunmod_kr
+    subroutine dres_dcatalyze_RIP1po4MLKLunmod_to_RIP1po4_MLKLactive_kc(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dcatalyze_RIP1po4MLKLunmod_to_RIP1po4_MLKLactive_kc
+    subroutine dres_dbind_MLKLactive_MLKLunmod_to_MLKLactiveMLKLunmod_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_MLKLactive_MLKLunmod_to_MLKLactiveMLKLunmod_kf
+    subroutine dres_dbind_MLKLactive_MLKLunmod_to_MLKLactiveMLKLunmod_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_MLKLactive_MLKLunmod_to_MLKLactiveMLKLunmod_kr
+    subroutine dres_dcatalyze_MLKLactiveMLKLunmod_to_MLKLactive_MLKLactive_kc(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dcatalyze_MLKLactiveMLKLunmod_to_MLKLactive_MLKLactive_kc
+    subroutine dres_dRIP1_trunc_kcf1(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dRIP1_trunc_kcf1
+    subroutine dres_dRIP1_trunc_kcr1(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dRIP1_trunc_kcr1
+    subroutine dres_dRIP1_trunc_kc1(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dRIP1_trunc_kc1
+    subroutine dres_dRIP1_trunc_kcf2(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dRIP1_trunc_kcf2
+    subroutine dres_dRIP1_trunc_kcr2(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dRIP1_trunc_kcr2
+    subroutine dres_dRIP1_trunc_kc2(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dRIP1_trunc_kc2
+    subroutine dres_dRIP1_trunc_kcf3(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dRIP1_trunc_kcf3
+    subroutine dres_dRIP1_trunc_kcr3(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dRIP1_trunc_kcr3
+    subroutine dres_dRIP1_trunc_kc3(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dRIP1_trunc_kc3
+    subroutine dres_dRIP1_trunc_kcf4(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dRIP1_trunc_kcf4
+    subroutine dres_dRIP1_trunc_kcr4(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dRIP1_trunc_kcr4
+    subroutine dres_dRIP1_trunc_kc4(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dRIP1_trunc_kc4
+    subroutine dres_dkc_c8_1(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dkc_c8_1
+    subroutine dres_dkc_c8_2(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dkc_c8_2
+    subroutine dres_dbind_C8A_RIP1unmod_to_C8ARIP1unmod_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_C8A_RIP1unmod_to_C8ARIP1unmod_kf
+    subroutine dres_dbind_C8A_RIP1unmod_to_C8ARIP1unmod_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_C8A_RIP1unmod_to_C8ARIP1unmod_kr
+    subroutine dres_dcatalyze_C8ARIP1unmod_to_C8A_RIP1trunc_kc(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dcatalyze_C8ARIP1unmod_to_C8A_RIP1trunc_kc
+    subroutine dres_dbind_C8A_RIP3unmod_to_C8ARIP3unmod_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_C8A_RIP3unmod_to_C8ARIP3unmod_kf
+    subroutine dres_dbind_C8A_RIP3unmod_to_C8ARIP3unmod_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_C8A_RIP3unmod_to_C8ARIP3unmod_kr
+    subroutine dres_dcatalyze_C8ARIP3unmod_to_C8A_RIP3trunc_kc(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dcatalyze_C8ARIP3unmod_to_C8A_RIP3trunc_kc
+    subroutine dres_dbind_C8A_BidU_to_C8ABidU_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_C8A_BidU_to_C8ABidU_kf
+    subroutine dres_dbind_C8A_BidU_to_C8ABidU_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_C8A_BidU_to_C8ABidU_kr
+    subroutine dres_dcatalyze_C8ABidU_to_C8A_BidT_kc(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dcatalyze_C8ABidU_to_C8A_BidT_kc
+    subroutine dres_dbind_C8A_CYLDU_to_C8ACYLDU_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_C8A_CYLDU_to_C8ACYLDU_kf
+    subroutine dres_dbind_C8A_CYLDU_to_C8ACYLDU_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_C8A_CYLDU_to_C8ACYLDU_kr
+    subroutine dres_dcatalyze_C8ACYLDU_to_C8A_CYLDT_kc(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dcatalyze_C8ACYLDU_to_C8A_CYLDT_kc
+    subroutine dres_dbind_NSC_NFkBI_to_NSCNFkBI_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_NSC_NFkBI_to_NSCNFkBI_kf
+    subroutine dres_dbind_NSC_NFkBI_to_NSCNFkBI_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_NSC_NFkBI_to_NSCNFkBI_kr
+    subroutine dres_dcatalyze_NSCNFkBI_to_NSC_NFkBA_kc(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dcatalyze_NSCNFkBI_to_NSC_NFkBA_kc
+    subroutine dres_dNFkB_FlipL(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dNFkB_FlipL
+    subroutine dres_dNFkB_FlipS(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dNFkB_FlipS
+    subroutine dres_dNFkB_TRAF_kc(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dNFkB_TRAF_kc
+    subroutine dres_dDegradase_flipL(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dDegradase_flipL
+    subroutine dres_dDegradase_flipS(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dDegradase_flipS
+    subroutine dres_dDegradase_TRAF(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dDegradase_TRAF
+    subroutine dres_ddeg_FlipL(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_ddeg_FlipL
+    subroutine dres_ddeg_FlipS(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_ddeg_FlipS
+    subroutine dres_ddeg_TRAF(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_ddeg_TRAF
+    subroutine dres_dbind_BidK_BidU_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_BidK_BidU_kf
+    subroutine dres_dbind_BidK_BidU_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_BidK_BidU_kr
+    subroutine dres_dkc_Bid_po4(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dkc_Bid_po4
+    subroutine dres_dkc_BidHypothesis_1(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dkc_BidHypothesis_1
+    subroutine dres_dkc_BidHypothesis_2(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dkc_BidHypothesis_2
+    subroutine dres_dbind_Bid_po4ANYANY_RIP1unmod_to_Bid_po4ANYANYRIP1unmod_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_Bid_po4ANYANY_RIP1unmod_to_Bid_po4ANYANYRIP1unmod_kf
+    subroutine dres_dbind_Bid_po4ANYANY_RIP1unmod_to_Bid_po4ANYANYRIP1unmod_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_Bid_po4ANYANY_RIP1unmod_to_Bid_po4ANYANYRIP1unmod_kr
+    subroutine dres_dcatalyze_Bid_po4ANYANYRIP1unmod_to_Bid_po4ANYANY_RIP1trunc_kc(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dcatalyze_Bid_po4ANYANYRIP1unmod_to_Bid_po4ANYANY_RIP1trunc_kc
+    subroutine dres_dbind_Bid_po4ANYANY_CYLDU_to_Bid_po4ANYANYCYLDU_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_Bid_po4ANYANY_CYLDU_to_Bid_po4ANYANYCYLDU_kf
+    subroutine dres_dbind_Bid_po4ANYANY_CYLDU_to_Bid_po4ANYANYCYLDU_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_Bid_po4ANYANY_CYLDU_to_Bid_po4ANYANYCYLDU_kr
+    subroutine dres_dcatalyze_Bid_po4ANYANYCYLDU_to_Bid_po4ANYANY_CYLDT_kc(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dcatalyze_Bid_po4ANYANYCYLDU_to_Bid_po4ANYANY_CYLDT_kc
+    subroutine dres_dbind_C3A_MLKLunmod_to_C3AMLKLunmod_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_C3A_MLKLunmod_to_C3AMLKLunmod_kf
+    subroutine dres_dbind_C3A_MLKLunmod_to_C3AMLKLunmod_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_C3A_MLKLunmod_to_C3AMLKLunmod_kr
+    subroutine dres_dcatalyze_C3AMLKLunmod_to_C3A_MLKLinactive_kc(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dcatalyze_C3AMLKLunmod_to_C3A_MLKLinactive_kc
+    subroutine dres_dbind_zVad_C8A_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_zVad_C8A_kf
+    subroutine dres_dbind_zVad_C8A_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_zVad_C8A_kr
+    subroutine dres_dbind_zVad_C3A_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_zVad_C3A_kf
+    subroutine dres_dbind_zVad_C3A_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_zVad_C3A_kr
+    subroutine dres_dkzVad1(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dkzVad1
+    subroutine dres_dkzVad2(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dkzVad2
+    subroutine dres_dequilibrate_BidT_to_BidM_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dequilibrate_BidT_to_BidM_kf
+    subroutine dres_dequilibrate_BidT_to_BidM_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dequilibrate_BidT_to_BidM_kr
+    subroutine dres_dequilibrate_BaxC_to_BaxM_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dequilibrate_BaxC_to_BaxM_kf
+    subroutine dres_dequilibrate_BaxC_to_BaxM_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dequilibrate_BaxC_to_BaxM_kr
+    subroutine dres_dequilibrate_BclxLC_to_BclxLM_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dequilibrate_BclxLC_to_BclxLM_kf
+    subroutine dres_dequilibrate_BclxLC_to_BclxLM_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dequilibrate_BclxLC_to_BclxLM_kr
+    subroutine dres_dbind_BidM_BaxM_to_BidMBaxM_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_BidM_BaxM_to_BidMBaxM_kf
+    subroutine dres_dbind_BidM_BaxM_to_BidMBaxM_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_BidM_BaxM_to_BidMBaxM_kr
+    subroutine dres_dcatalyze_BidMBaxM_to_BidM_BaxA_kc(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dcatalyze_BidMBaxM_to_BidM_BaxA_kc
+    subroutine dres_dbind_BidM_BakM_to_BidMBakM_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_BidM_BakM_to_BidMBakM_kf
+    subroutine dres_dbind_BidM_BakM_to_BidMBakM_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_BidM_BakM_to_BidMBakM_kr
+    subroutine dres_dcatalyze_BidMBakM_to_BidM_BakA_kc(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dcatalyze_BidMBakM_to_BidM_BakA_kc
+    subroutine dres_dbind_BidM_Bcl2_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_BidM_Bcl2_kf
+    subroutine dres_dbind_BidM_Bcl2_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_BidM_Bcl2_kr
+    subroutine dres_dbind_BidM_BclxLM_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_BidM_BclxLM_kf
+    subroutine dres_dbind_BidM_BclxLM_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_BidM_BclxLM_kr
+    subroutine dres_dbind_BidM_Mcl1M_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_BidM_Mcl1M_kf
+    subroutine dres_dbind_BidM_Mcl1M_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_BidM_Mcl1M_kr
+    subroutine dres_dbind_BadM_Bcl2_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_BadM_Bcl2_kf
+    subroutine dres_dbind_BadM_Bcl2_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_BadM_Bcl2_kr
+    subroutine dres_dbind_BadM_BclxLM_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_BadM_BclxLM_kf
+    subroutine dres_dbind_BadM_BclxLM_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_BadM_BclxLM_kr
+    subroutine dres_dbind_NoxaM_Mcl1M_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_NoxaM_Mcl1M_kf
+    subroutine dres_dbind_NoxaM_Mcl1M_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_NoxaM_Mcl1M_kr
+    subroutine dres_dbind_BaxA_Bcl2_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_BaxA_Bcl2_kf
+    subroutine dres_dbind_BaxA_Bcl2_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_BaxA_Bcl2_kr
+    subroutine dres_dbind_BaxA_BclxLM_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_BaxA_BclxLM_kf
+    subroutine dres_dbind_BaxA_BclxLM_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_BaxA_BclxLM_kr
+    subroutine dres_dbind_BakA_BclxLM_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_BakA_BclxLM_kf
+    subroutine dres_dbind_BakA_BclxLM_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_BakA_BclxLM_kr
+    subroutine dres_dbind_BakA_Mcl1_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_BakA_Mcl1_kf
+    subroutine dres_dbind_BakA_Mcl1_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_BakA_Mcl1_kr
+    subroutine dres_dassemble_pore_sequential_Bax_2_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dassemble_pore_sequential_Bax_2_kf
+    subroutine dres_dassemble_pore_sequential_Bax_2_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dassemble_pore_sequential_Bax_2_kr
+    subroutine dres_dassemble_pore_sequential_Bax_3_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dassemble_pore_sequential_Bax_3_kf
+    subroutine dres_dassemble_pore_sequential_Bax_3_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dassemble_pore_sequential_Bax_3_kr
+    subroutine dres_dassemble_pore_sequential_Bax_4_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dassemble_pore_sequential_Bax_4_kf
+    subroutine dres_dassemble_pore_sequential_Bax_4_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dassemble_pore_sequential_Bax_4_kr
+    subroutine dres_dassemble_pore_sequential_Bak_2_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dassemble_pore_sequential_Bak_2_kf
+    subroutine dres_dassemble_pore_sequential_Bak_2_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dassemble_pore_sequential_Bak_2_kr
+    subroutine dres_dassemble_pore_sequential_Bak_3_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dassemble_pore_sequential_Bak_3_kf
+    subroutine dres_dassemble_pore_sequential_Bak_3_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dassemble_pore_sequential_Bak_3_kr
+    subroutine dres_dassemble_pore_sequential_Bak_4_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dassemble_pore_sequential_Bak_4_kf
+    subroutine dres_dassemble_pore_sequential_Bak_4_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dassemble_pore_sequential_Bak_4_kr
+    subroutine dres_dpore_transport_complex_BaxA_4_CytoCM_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dpore_transport_complex_BaxA_4_CytoCM_kf
+    subroutine dres_dpore_transport_complex_BaxA_4_CytoCM_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dpore_transport_complex_BaxA_4_CytoCM_kr
+    subroutine dres_dpore_transport_dissociate_BaxA_4_CytoCC_kc(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dpore_transport_dissociate_BaxA_4_CytoCC_kc
+    subroutine dres_dpore_transport_complex_BaxA_4_SmacM_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dpore_transport_complex_BaxA_4_SmacM_kf
+    subroutine dres_dpore_transport_complex_BaxA_4_SmacM_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dpore_transport_complex_BaxA_4_SmacM_kr
+    subroutine dres_dpore_transport_dissociate_BaxA_4_SmacC_kc(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dpore_transport_dissociate_BaxA_4_SmacC_kc
+    subroutine dres_dpore_transport_complex_BakA_4_CytoCM_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dpore_transport_complex_BakA_4_CytoCM_kf
+    subroutine dres_dpore_transport_complex_BakA_4_CytoCM_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dpore_transport_complex_BakA_4_CytoCM_kr
+    subroutine dres_dpore_transport_dissociate_BakA_4_CytoCC_kc(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dpore_transport_dissociate_BakA_4_CytoCC_kc
+    subroutine dres_dpore_transport_complex_BakA_4_SmacM_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dpore_transport_complex_BakA_4_SmacM_kf
+    subroutine dres_dpore_transport_complex_BakA_4_SmacM_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dpore_transport_complex_BakA_4_SmacM_kr
+    subroutine dres_dpore_transport_dissociate_BakA_4_SmacC_kc(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dpore_transport_dissociate_BakA_4_SmacC_kc
+    subroutine dres_dequilibrate_SmacC_to_SmacA_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dequilibrate_SmacC_to_SmacA_kf
+    subroutine dres_dequilibrate_SmacC_to_SmacA_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dequilibrate_SmacC_to_SmacA_kr
+    subroutine dres_dequilibrate_CytoCC_to_CytoCA_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dequilibrate_CytoCC_to_CytoCA_kf
+    subroutine dres_dequilibrate_CytoCC_to_CytoCA_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dequilibrate_CytoCC_to_CytoCA_kr
+    subroutine dres_dbind_CytoCA_ApafI_to_CytoCAApafI_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_CytoCA_ApafI_to_CytoCAApafI_kf
+    subroutine dres_dbind_CytoCA_ApafI_to_CytoCAApafI_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_CytoCA_ApafI_to_CytoCAApafI_kr
+    subroutine dres_dcatalyze_CytoCAApafI_to_CytoCA_ApafA_kc(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dcatalyze_CytoCAApafI_to_CytoCA_ApafA_kc
+    subroutine dres_dconvert_ApafA_C9_to_Apop_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dconvert_ApafA_C9_to_Apop_kf
+    subroutine dres_dconvert_ApafA_C9_to_Apop_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dconvert_ApafA_C9_to_Apop_kr
+    subroutine dres_dbind_Apop_C3pro_to_ApopC3pro_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_Apop_C3pro_to_ApopC3pro_kf
+    subroutine dres_dbind_Apop_C3pro_to_ApopC3pro_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_Apop_C3pro_to_ApopC3pro_kr
+    subroutine dres_dcatalyze_ApopC3pro_to_Apop_C3A_kc(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dcatalyze_ApopC3pro_to_Apop_C3A_kc
+    subroutine dres_dbind_Apop_XIAP_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_Apop_XIAP_kf
+    subroutine dres_dbind_Apop_XIAP_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_Apop_XIAP_kr
+    subroutine dres_dbind_SmacA_XIAP_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_SmacA_XIAP_kf
+    subroutine dres_dbind_SmacA_XIAP_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_SmacA_XIAP_kr
+    subroutine dres_dbind_C8A_C3pro_to_C8AC3pro_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_C8A_C3pro_to_C8AC3pro_kf
+    subroutine dres_dbind_C8A_C3pro_to_C8AC3pro_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_C8A_C3pro_to_C8AC3pro_kr
+    subroutine dres_dcatalyze_C8AC3pro_to_C8A_C3A_kc(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dcatalyze_C8AC3pro_to_C8A_C3A_kc
+    subroutine dres_dbind_XIAP_C3A_to_XIAPC3A_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_XIAP_C3A_to_XIAPC3A_kf
+    subroutine dres_dbind_XIAP_C3A_to_XIAPC3A_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_XIAP_C3A_to_XIAPC3A_kr
+    subroutine dres_dcatalyze_XIAPC3A_to_XIAP_C3ub_kc(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dcatalyze_XIAPC3A_to_XIAP_C3ub_kc
+    subroutine dres_dbind_C3A_PARPU_to_C3APARPU_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_C3A_PARPU_to_C3APARPU_kf
+    subroutine dres_dbind_C3A_PARPU_to_C3APARPU_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_C3A_PARPU_to_C3APARPU_kr
+    subroutine dres_dcatalyze_C3APARPU_to_C3A_PARPC_kc(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dcatalyze_C3APARPU_to_C3A_PARPC_kc
+    subroutine dres_dkf51(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dkf51
+    subroutine dres_dkr51(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dkr51
+    subroutine dres_dkf52(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dkf52
+    subroutine dres_dkr52(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dkr52
+    subroutine dres_dkc52(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dkc52
+    subroutine dres_dbind_C3A_C6pro_to_C3AC6pro_kf(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_C3A_C6pro_to_C3AC6pro_kf
+    subroutine dres_dbind_C3A_C6pro_to_C3AC6pro_kr(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dbind_C3A_C6pro_to_C3AC6pro_kr
+    subroutine dres_dcatalyze_C3AC6pro_to_C3A_C6A_kc(time, dynamicVars, yprime, constants, pd)
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: dynamicVars
+        double precision intent(in), dimension(799) :: yprime
+        double precision intent(in), dimension(194) :: constants
+        double precision intent(out), dimension(799) :: pd
+    end subroutine dres_dcatalyze_C3AC6pro_to_C3A_C6A_kc
+    
+    subroutine sens_rhs(time, sens_y, sens_yp, cj, sens_res, ires, constants, ipar) 
+        double precision intent(in) :: time
+        double precision intent(in), dimension(2*799) :: sens_y
+        double precision intent(in), dimension(2*799) :: sens_yp
+        double precision intent(hide) :: cj
+        double precision intent(out), dimension(2*799) :: sens_res
+        integer intent(hide) :: ires
+        double precision intent(in), dimension(194+1) :: constants
+        integer intent(hide), dimension(2) :: ipar
+    end subroutine sens_rhs
+    subroutine res_function_logdv(time, log_dv, log_yp, cj, residual, ires, constants, ipar) 
+        double precision intent(in) :: time
+        double precision intent(in), dimension(799) :: log_dv
+        double precision intent(in), dimension(799) :: log_yp
+        double precision intent(hide) :: cj
+        double precision intent(out), dimension(799) :: residual
+        integer intent(hide) :: ires
+        double precision intent(in), dimension(194) :: constants
+        integer intent(hide), dimension(2) :: ipar
+    end subroutine res_function_logdv
+    subroutine root_func_logdv(neq,t,log_dv,log_yp,nrt,root_devs,constants,ipar)
+        integer intent(hide) :: neq
+        double precision intent(in) :: t
+        double precision intent(in), dimension(799) :: log_dv
+        double precision intent(in), dimension(799) :: log_yp
+        integer intent(hide) :: nrt
+        double precision intent(out), dimension(0) :: root_devs
+        double precision intent(in), dimension(194) :: constants
+        ! This has been set equal to (neq, len(rpar)) in the daskr call
+        integer dimension(2), intent(hide) :: ipar
+    end subroutine root_func_logdv
+    subroutine sens_rhs_logdv(time, sens_y_log, sens_yp_log, cj, sens_res, ires, constants, ipar) 
+        double precision intent(in) :: time
+        double precision intent(in), dimension(2*799) :: sens_y_log
+        double precision intent(in), dimension(2*799) :: sens_yp_log
+        double precision intent(hide) :: cj
+        double precision intent(out), dimension(2*799) :: sens_res
+        integer intent(hide) :: ires
+        double precision intent(in), dimension(194+1) :: constants
+        integer intent(hide), dimension(2) :: ipar
+    end subroutine sens_rhs_logdv
+    subroutine integrate_stochastic_tidbit(seed_ptr, reseed, time_ptr, dv, cv, rmsd_ptr, stop_time_ptr, trajectory)
+	integer intent(in) :: seed_ptr
+	integer intent(in) :: reseed
+	double precision intent(in,out) :: time_ptr
+	integer intent(in,out), dimension(799) :: dv
+	double precision intent(in), dimension(194) :: cv
+	double precision intent(in) :: rmsd_ptr
+	double precision intent(in,out) :: stop_time_ptr
+	double precision intent(out), dimension(799) :: trajectory
+    end subroutine integrate_stochastic_tidbit
+end interface
+end module Necr1_0_Michaels_MacBook_Pro_local_11_8535221041_21049

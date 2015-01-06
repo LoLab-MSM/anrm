@@ -10,7 +10,7 @@ import simulator_1_0 as sim
 import bayes_mcmc as bmc
 import matplotlib.pyplot as plt
 
-Exp_name = ('CompII_Hyp_123_Bid_Hyp0_newtopology_1run_v0')
+Exp_name = ('CompII_Hypthesis_123_newtopology_2run_v40')
 
 #----Describing Published Data-----
 def ydata_fn():
@@ -43,27 +43,32 @@ for k in ynorm.keys():
 
 
 # plot data
-plt.ion()
+#plt.ion()
 tspan = np.linspace(0,36000,1000)/3600
 ii = 0
-colors = ['b', 'g', 'r', 'c']
+colors = ['g', 'r', 'c']
 
 label = {}
 label['Apop1'] = 'CytoC in WT Jurkat Cells with 10ng/mL TNF'
 label['Apop2'] = 'cPARP in WT Jurkat Cells with 20ng/mL TNF'
 label['Necr1'] = 'MLKL in -/-FADD Jurkat Cells with 30ng TNF and 20uM zVAD'
 
-for k in ydata.keys():
+ydks = ['Apop2', 'Apop1']
+#plt.errorbar(ynorm[k][0][:,0], ynorm[k][0][:,1], yerr = ynorm[k][0][:,2], fmt = '%s.' % colors[ii], label = '%s Data' % label[k])
+
+#fig= plt.figure()
+#for k in ydata.keys():
+for k in ydks:
     plt.errorbar(ynorm[k][0][:,0], ynorm[k][0][:,1], yerr = ynorm[k][0][:,2], fmt = '%s.' % colors[ii], label = '%s Data' % label[k])
 
-    yinitial = pickle.load(open('%s_Initial_Values_%s.pkl' % (Exp_name, k)))
-    plt.plot(tspan, yinitial, '%s--' % colors[ii], label = 'Initial for %s' % label[k])
+    #yinitial = pickle.load(open('%s_Initial_Values_%s.pkl' % (Exp_name, k)))
+    #    plt.plot(tspan, yinitial, '%s--' % colors[ii], label = 'Initial for %s' % label[k])
 
-    yfinal = pickle.load(open('%s_Final_Values_%s.pkl' % (Exp_name, k)))
-    plt.plot(tspan, yfinal, '%s-' % colors[ii], label = 'Final for %s' % label[k])
+    #yfinal = pickle.load(open('%s_Final_Values_%s.pkl' % (Exp_name, k)))
+    #plt.plot(tspan, yfinal, '%s-' % colors[ii], label = 'Final for %s' % label[k])
 
     ii = ii+1
 
 plt.xlabel('time [hrs]')
-plt.title('Apoptotic and Necrotic Signals')
+#plt.title('Apoptotic and Necrotic Signals')
 plt.legend(loc = 'lower left', bbox_to_anchor = (-0.1, -0.5))
