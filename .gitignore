@@ -15,4 +15,5 @@
 *.bngl
 *.xml
 doc/_build
-
+*/*/*.c
+*/*.c
