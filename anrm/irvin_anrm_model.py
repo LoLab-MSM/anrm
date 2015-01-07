@@ -2,10 +2,10 @@ from pysb import *
 from pysb.util import alias_model_components
 from earm import shared
 
-from anrm import irvin_modules_v4 as irvin
 from earm import lopez_modules as lopez
 from earm import albeck_modules as albeck
-from anrm import merge
+import irvin_modules_v4 as irvin
+import merge
 
 # -----Monomers-----
 def compile_monomers():

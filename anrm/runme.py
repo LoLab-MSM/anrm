@@ -5,14 +5,14 @@ Apoptosis-Necrosis Reaction Network Model:
 import pickle
 import numpy as np
 import pylab as p
-import calibratortools as ct
-import simulator_1_0 as sim
+from numtools import calibratortools as ct
+from numtools import simulator_1_0 as sim
 
 from irvin_anrm_model import model
 from pysb.integrate  import odesolve
 
 #-----------Calibrated Parameters-----------------------
-position = pickle.load(open('irvin_anrm_model_calibrated_params.pkl'))
+position = pickle.load(open('irvin_anrm_model_fitted_params.pkl'))
 
 #-----------Simulator Settings--------------------------
 sims = sim.Settings()
