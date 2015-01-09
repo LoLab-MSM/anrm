@@ -38,23 +38,10 @@ necroptotic_conditions = ct.initial_conditions(['Bak_0', 'Bax_0', 'Bid_0', 'zVad
 y_necr = solve.simulate(position, observables=True, initial_conc = necroptotic_conditions)
 yout2 = ct.extract_records(y_necr, ['Obs_cPARP', 'Obs_MLKL'])
 
-"""p.figure('Apoptosis')
-p.ion()
-p.plot(sims.tspan, (yout1[:,2]+yout1[:,3])/np.max((yout1[:,2]+yout1[:,3])), label = 'RIP1 in Complex I')
-p.plot(sims.tspan, yout1[:,4]/np.max(yout1[:,4]), label = 'Complex IIa (TRADD)')
-p.plot(sims.tspan, yout1[:,5]/np.max(yout1[:,5]), label = 'Complex IIb (FADD)')
-p.plot(sims.tspan, yout1[:,6]/np.max(yout1[:,6]), label = 'tRIP1')
-p.plot(sims.tspan, yout1[:,7]/np.max(yout1[:,7]), label = 'po4-RIP1')
-#p.plot(sims.tspan, yout1[:,1], label = 'MLKL')"""
-
 p.figure('Apoptosis')
 p.ion()
-p.plot(sims.tspan, (yout1[:,2]+yout1[:,3]), label = 'RIP1 in Complex I')
-p.plot(sims.tspan, yout1[:,4], label = 'Complex IIa (TRADD)')
-p.plot(sims.tspan, yout1[:,5], label = 'Complex IIb (FADD)')
-p.plot(sims.tspan, yout1[:,6], label = 'tRIP1')
-p.plot(sims.tspan, yout1[:,7], label = 'po4-RIP1')
-#p.plot(sims.tspan, yout1[:,1], label = 'MLKL')
+p.plot(sims.tspan, yout1[:,0], label = 'Cleaved Parp')
+p.plot(sims.tspan, yout2[:,1], label = 'MLKL')
 
 p.xlabel('time [sec]')
 p.ylabel('PARP and MLKL concentration [molecules per cell]')

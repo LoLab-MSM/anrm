@@ -72,10 +72,8 @@ lopez.sensitizers_bind_anti_apoptotics()
 lopez.effectors_bind_anti_apoptotics()
 lopez.lopez_pore_formation(do_pore_transport=True)
 
-# From albeck_modules
-albeck.pore_to_parp()
-
-
+#From irvin_modules
+irvin.pore_to_parp()
 
 
  
