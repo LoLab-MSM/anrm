@@ -5,8 +5,8 @@ Apoptosis-Necrosis Reaction Network Model:
 import pickle
 import numpy as np
 import pylab as p
-import numtools.calibratortools as ct
-import numtools.simulator_1_0 as sim
+from numtools import calibratortools as ct
+from numtools import simulator_1_0 as sim
 
 from irvin_anrm_model import model
 from pysb.integrate  import odesolve
