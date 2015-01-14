@@ -385,7 +385,7 @@ def pore_to_parp():
     KF = 1e-6
     KR = 1e-3
     KC = 1
-    import earm.shared as es
+    from earm.shared import one_step_conv, transloc_rates
     Parameter('Apaf_0'  , 48176) # Apaf-1 (J Immunol 2005)
     Parameter('C3_0'    , 96352) # procaspase-3 (pro-C3) (J Immunol 2005)
     Parameter('C6_0'    , 1.0e4) # procaspase-6 (pro-C6)
@@ -398,7 +398,6 @@ def pore_to_parp():
     Initial(Apaf(bf=None, state='I'), Apaf_0)
     Initial(C3(bf=None, state='pro'), C3_0)
     Initial(C6(bf1=None, bf2=None, state='pro'), C6_0)
-    #Initial(C6(bf=None, state='pro'), C6_0)
     Initial(C9(bf=None), C9_0)
     Initial(PARP(bf=None, state='U'), PARP_0)
     Initial(XIAP(bf=None), XIAP_0)
@@ -407,27 +406,26 @@ def pore_to_parp():
     # --------------------------------------
     
     equilibrate(Smac(bf=None, state='C'), Smac(bf=None, state='A'),
-                es.transloc_rates)
+                transloc_rates)
                 
     equilibrate(CytoC(bf=None, state='C'), CytoC(bf=None, state='A'),
-                es.transloc_rates)
+                transloc_rates)
                             
     # Apoptosome formation
     # --------------------
     #   Apaf + cCytoC <-->  Apaf:cCytoC --> aApaf + cCytoC
     #   aApaf + pC9 <-->  Apop
     #   Apop + pC3 <-->  Apop:pC3 --> Apop + C3
-                            
-    es.catalyze(CytoC(state='A'), Apaf(state='I'), Apaf(state='A'), [5.77e-10, 5.7e-3, KC])#(J Immunol 2005)
-    es.one_step_conv(Apaf(state='A'), C9(), Apop(bf=None), [5.90e-7, 0.07493])
-    es.catalyze(Apop(), C3(state='pro'), C3(bf=None, state='A'), [9.15e-7, 0.1, 0.7])
-                            
+    catalyze_state(CytoC(state='A'), 'bf', Apaf(), 'bf','state', 'I', 'A', [5.77e-10, 5.7e-3, KC])#(J Immunol 2005)
+    one_step_conv(Apaf(state='A'), C9(), Apop(bf=None), [5.90e-7, 0.07493])
+    catalyze_state(Apop(), 'bf', C3(), 'bf', 'state', 'pro', 'A', [9.15e-7, 0.1, 0.7])
+    
     # Apoptosome-related inhibitors
     # -----------------------------
     #   Apop + XIAP <-->  Apop:XIAP
     #   cSmac + XIAP <-->  cSmac:XIAP
-    es.bind(Apop(), XIAP(), [2e-6, KR])
-    es.bind(Smac(state='A'), XIAP(), [1.45e-5, 2.21e-3])
+    bind(Apop(),'bf', XIAP(), 'bf', [2e-6, KR])
+    bind(Smac(state='A'), 'bf', XIAP(), 'bf', [1.45e-5, 2.21e-3])
     
     # Caspase reactions
     # -----------------
@@ -438,10 +436,9 @@ def pore_to_parp():
     #   XIAP + C3 <--> XIAP:C3 --> XIAP + C3_U CSPS
     #   PARP + C3 <--> PARP:C3 --> CPARP + C3 CSPS
     #   pC8 + C6 <--> pC8:C6 --> C8 + C6 CSPS
-    from pysb.macros import catalyze_state
-    es.catalyze(C8(state='A'), C3(state= 'pro'),C3(state = 'A'), [1e-7, KR, KC])
-    es.catalyze(XIAP(), C3(state='A'), C3(state = 'ub'), [KF, KR, 1e-1]) #[5.13e-6, 2.40e-3, 1e-1]
-    es.catalyze(C3(state='A'), PARP(state='U'), PARP(state='C'), [KF, 1e-2, KC])
+    catalyze(C8(state='A'),'bf',C3(state= 'pro'), 'bf', C3(state = 'A'), [1e-7, KR, KC])
+    catalyze(XIAP(), 'bf', C3(state='A'), 'bf', C3(state = 'ub'), [KF, KR, 1e-1]) #[5.13e-6, 2.40e-3, 1e-1]
+    catalyze(C3(state='A'), 'bf', PARP(state='U'), 'bf', PARP(state='C'), [KF, 1e-2, KC])
     Parameter('kf51', 1e-6) # Generic association rate constant
     Parameter('kr51', 1e-3) # Generic dessociation rate constant
     Parameter('kf52', 1e-6) # Generic association rate constant
@@ -449,9 +446,8 @@ def pore_to_parp():
     Parameter('kc52', 1) # Generic catalytic rate constant
     alias_model_components()
     catalyze_state(C3(state='A'), 'bf', C6(), 'bf1', 'state', 'pro', 'A', [KF, KR, KC])
-    from pysb.macros import bind as bind2
-    bind2(C6(bf1 = None, bf2 = None, state = 'A'), 'bf1', proC8(bDED = None), 'bDED', [kf51, kr51])
-    bind2(C6(bf1 = ANY, bf2 = None, state = 'A'), 'bf2', proC8(bDED = None), 'bDED', [kf52, kr52])
+    bind(C6(bf1 = None, bf2 = None, state = 'A'), 'bf1', proC8(bDED = None), 'bDED', [kf51, kr51])
+    bind(C6(bf1 = ANY, bf2 = None, state = 'A'), 'bf2', proC8(bDED = None), 'bDED', [kf52, kr52])
     Rule('C8_activation_byC6', C6(bf1 = ANY, bf2 = ANY, state = 'A')%proC8(bDED = ANY)%proC8(bDED = ANY) >> C8(bf = None, state = 'A') + C6(bf1=None, bf2=None, state = 'A'), kc52)
          
 def observables():
