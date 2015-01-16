@@ -5,8 +5,8 @@ import numpy as np
 import pylab as p
 import matplotlib as mpl
 import pickle
-import calibratortools as ct
-import simulator_1_0 as sim
+from anrm.numtools import calibratortools as ct
+from anrm.numtools import simulator_1_0 as sim
 
 # ----------Model and Initial Conditions----------------
 from anrm.irvin_anrm_model  import model

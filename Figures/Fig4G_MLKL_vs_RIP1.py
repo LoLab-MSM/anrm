@@ -5,11 +5,11 @@ import numpy as np
 import pylab as p
 import matplotlib as mpl
 import pickle
-import calibratortools as ct
-import simulator_1_0 as sim
+from anrm.numtools import calibratortools as ct
+from anrm.numtools import simulator_1_0 as sim
 
 # ----------Model and Initial Conditions----------------
-from anrm.irvin_mod_v5_tester  import model
+from anrm.irvin_anrm_model  import model
 
 range_RIP1  = [0, 4000, 8000, 12044, 16000, 20000]
 
@@ -43,7 +43,7 @@ rangecv = range_RIP1
 for i in rangecv:
     #-----------Initial Conditions--------------------------
     ic_params  = model.parameters_initial_conditions()
-    conditions = ct.initial_conditions([condition_variable], [i], ic_params)
+    conditions = ct.initial_conditions([condition_variable, 'TNFa_0'], [i, 1500], ic_params)
     ysim = solve.simulate(position = position, observables=True, initial_conc = conditions)
     
     #-----------Plot Parp and MLKL--------------------------
