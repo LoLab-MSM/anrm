@@ -1,6 +1,7 @@
 # Simulator 1.0 (Irvin et. al 2013) simulates ANRM 
 
 import numpy as np
+from collections import Counter
 import calibratortools as ct
 
 
@@ -196,6 +197,44 @@ class Solver(object):
             # position and inverting the log transform
         values[self.estimate_idx] = np.power(10, position)
         return values
+
+    def optimal_scale_nominal_discrete(self, data, model, position, observable):
+        """Represents nominal discrete data as a quantitative output of the model.
+            data: dictionary of experiments {name: [{initial conditions}, observation]}
+            data dictionaries must be contain only one type of data (nominal-discrete in this case).
+            model: model (pysb)
+            position: array with list of log-10 of the values of the parameters used in the model
+            observable: function that returns the value of the observable representitave of the exerimental observations
+        
+            Returns a list (z) of optimally scaled values for the observable and a list (zkeys) of the exeriment names that go with the optimal scaled observables. """
+        conditions = {}
+        observations = []
+        ic_params  = model.parameters_initial_conditions()
+        #Make a list of observation categories
+        for k in data.keys():
+            conditions[k] = ct.initial_conditions(data[k][0].keys(), data[k][0].values(), ic_params)
+            observations.append(data[k][1])
+        observations = Counter(observations).keys()
+    
+        zU = []
+        zU_keys = []
+        for k in conditions.keys():
+            ysim = self.simulate(position, observables=True, initial_conc=conditions[k])
+            z = observable(ysim)
+            zU_keys.append(k)
+        
+            zU_k = [0]*len(observations)
+            zU_k[observations.index(data[k][1])] = 1
+            zU_k.insert(0,z[0])
+            zU.append(zU_k)
+    
+        zU = np.matrix(zU)
+        z = zU[:,0]
+        U = zU[:,1:]
+    
+        z_scaled = np.matrix.getI(U.T*U)*U*z
+    
+        return z_scaled, zU_keys
 
 """
     TODO

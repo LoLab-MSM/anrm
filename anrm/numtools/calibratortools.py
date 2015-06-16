@@ -1,7 +1,8 @@
 # Fits ANRM 1.0 (Irvin et. al 2013) against single-cell measurements
 # of caspase reporters.
 import numpy as np
-import scipy as sp 
+import scipy as sp
+from collections import Counter
 from scipy.interpolate import *
 """ TODO
     insure that there is protein dynamics data and initial concentration data
@@ -73,3 +74,6 @@ def calculate_time_delay(signal, tspan):
         norm_signal = norm_signal.tolist()
         idx         = norm_signal.index(min(norm_signal, key = lambda x: abs(x-0.5)))
         return cubic_spline(norm_signal[idx-3:idx+3], tspan[idx-3:idx+3], [0.5], degree = 3)
+
+def calculate_gain(signal):
+    return signal[-1]
