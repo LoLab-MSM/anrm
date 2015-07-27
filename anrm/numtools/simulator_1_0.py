@@ -62,7 +62,6 @@ class Settings():
     def copy(self):
         new_options = Settings()
         new_options.__dict__.update(self.__dict__)
-        print new_options
         return new_options
 
 class Solver(object):
@@ -91,6 +90,11 @@ class Solver(object):
         if options.estimate_params is None or not len(options.estimate_params):
             raise Exception("estimate_params must contain a list of parameters")
         return options
+    
+    def copy(self):
+        new_options = Solver(self.options)
+        new_options.__dict__.update(self.__dict__)
+        return new_options
 
     def run(self):
         """Initialize internal state and runs the parameter estimation."""
@@ -156,11 +160,13 @@ class Solver(object):
         if initial_conc is not None:
             yi = np.zeros(len(self.options.model.species))
             
+            explore = {}
             for cp, ic_param in self.options.model.initial_conditions:
                 
                 ii = self.options.model.parameters_initial_conditions().index(ic_param)
                 si = self.options.model.get_species_index(cp)
                 yi[si] = initial_conc[ii]
+
             self.solver.run(self.cur_params(position), yi)
         else:
             self.solver.run(self.cur_params(position))
@@ -238,23 +244,24 @@ class Solver(object):
 
     def optimal_scale_ordinal_discrete(self, data, model, position, observable):
         """Represents ordinal discrete data as a quantitative output of the model.
-            data: dictionary of experiments {name: [{initial conditions}, observation]}
+            data: dictionary of experiments {name: [{initial conditions}, observation]}, requires an order term 'order' lists the rank of the ordinal catagories of the data.
             data dictionaries must be contain only one type of data (nominal-discrete in this case).
             model: model (pysb)
             position: array with list of log-10 of the values of the parameters used in the model
             observable: function that returns the value of the observable representitave of the exerimental observations
         
             Returns a list (z) of optimally scaled values for the observable and a list (zkeys) of the exeriment names that go with the optimal scaled observables. """
+        
         conditions = {}
         observations = []
+        order = data.pop('order')
+        #FIX: I want to put an error in if 'order' is absent
         ic_params  = model.parameters_initial_conditions()
         #Make a list of observation categories
         for k in data.keys():
             conditions[k] = ct.initial_conditions(data[k][0].keys(), data[k][0].values(), ic_params)
             observations.append(data[k][1])
         observations = Counter(observations).keys()
-
-        print observations, "observations"
     
         zU = []
         zU_keys = []
@@ -275,7 +282,6 @@ class Solver(object):
         z_scaled = np.matrix.getI(U.T*U)*U*z
     
         return z_scaled, zU_keys
-
 
 
 """
