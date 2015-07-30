@@ -2,7 +2,7 @@
 
 import numpy as np
 import itertools as itr
-
+import multiprocessing as mp
 import calibratortools as ct
 
 from copy import deepcopy
@@ -89,16 +89,26 @@ class Analysis(object):
 
     def model_outputs(self):
         ysims = {}
-        for k in self.cond_names.keys():
-            ysims_k = deepcopy(self.options.simulate(self.position, observables=True, initial_conc=self.conditions[k]))
-            ysims[k] = ysims_k
+        if self.multiprocess:
+            print "model outputs", dt.datetime.now() - start
+
+            num_procs = min(mp.cpu_count()-2, len(self.conditions))
+            iterate_args = [(k,v) for k, v in self.conditions.iteritems()]
+            ysim_list = parmap(lambda i: self.get_ysim(i), iterate_args, nprocs=num_procs)
+            for i in range(len(ysim_list)):
+                ysims[iterate_args[i][0]] = ysim_list[i]
+    
+        else:
+            for k in self.cond_names.keys():
+                ysims[k] = deepcopy(self.options.simulate(self.position, observables=True, initial_conc=self.conditions[k]))
         
         for d in self.data_list:
             d.ysim = ysims[d.con_name]
             d.modelout = d.assign_obs_values()
-        print "Model outputs", dt.datetime.now()-start
 
-
+    def get_ysim(self, condition):
+        return deepcopy(self.options.simulate(self.position, observables = True, initial_conc = condition[1]))
+    
     def create_iterator(self, datalist):
         types = Counter([d.type for d in datalist])
         observables = Counter([d.observable for d in datalist])
@@ -125,28 +135,22 @@ class Analysis(object):
             raise Exception("Please provide type and observable to trim the data set by")
         for d in data_list:
             trimmed_data = [(i,d) for i, d in enumerate(data_list) if (d.type == type and d.observable == observable)]
-
         if partition:
             td = [(i,d) for (i,d) in trimmed_data if d.partition == partition]
             trimmed_data = td
-
         else:
             td = [(i,d) for (i,d) in trimmed_data if d.partition == trimmed_data[0][1].partition]
             trimmed_data = td
-
         if obs_func:
             td = [(i,d) for (i,d)in trimmed_data if d.obs_func == obs_func]
             trimmed_data = td
-
         else:
             td = [(i,d) for (i,d) in trimmed_data if d.obs_func == trimmed_data[0][1].obs_func]
             trimmed_data = td
-
         if obs_func_input:
             td = [(i,d) for (i,d) in trimmed_data if d.obs_func_input == obs_func_input]
             trimmed_data = td
             # Not using "else:" because we can compare data from different timepoints etc..
-
         return trimmed_data
 
     def indicate_matrix(self, datalist):
@@ -232,7 +236,29 @@ class Analysis(object):
             
             print (ordereddata[i][1].exp_name, ordereddata[i][1].con_name,ordereddata[i][1].observation, ordereddata[i][1].observable, ordereddata[i][1].modelout, ordereddata[i][1].z_scaled)
 
+def fun(f,q_in,q_out):
+    while True:
+        i,x = q_in.get()
+        if i is None:
+            break
+        q_out.put((i,f(x)))
 
+def parmap(f, X, nprocs = mp.cpu_count()):
+    q_in   = mp.Queue(1)
+    q_out  = mp.Queue()
+    
+    proc = [mp.Process(target=fun,args=(f,q_in,q_out)) for _ in range(nprocs)]
+    for p in proc:
+        p.daemon = True
+        p.start()
+    
+    sent = [q_in.put((i,x)) for i,x in enumerate(X)]
+    [q_in.put((None,None)) for _ in range(nprocs)]
+    res = [q_out.get() for _ in range(len(sent))]
+    
+    [p.join() for p in proc]
+    
+    return [x for i,x in sorted(res)]
 
 """Options for defining a bayessb.MCMC project/run.
     
