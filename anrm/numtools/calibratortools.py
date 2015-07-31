@@ -77,3 +77,6 @@ def calculate_time_delay(signal, tspan):
 
 def calculate_gain(signal):
     return signal[-1]
+
+def timepoints(signal, timepoints):
+    return cubic_spline(xsim, ysim, timepoints)
