@@ -235,7 +235,7 @@ class Analysis(object):
                 ordereddata[i][1].z_scaled = z_scaled[i]
             
             print (ordereddata[i][1].exp_name, ordereddata[i][1].con_name,ordereddata[i][1].observation, ordereddata[i][1].observable, ordereddata[i][1].modelout, ordereddata[i][1].z_scaled)
-"""
+
 num_procs = min(mp.cpu_count()-1, len(self.conditions))
 iterate_args = [(k,v) for k, v in self.conditions.iteritems()]
 ysim_list = parmap(lambda i: self.get_ysim(i), iterate_args, nprocs=num_procs)
@@ -244,15 +244,14 @@ for i in range(len(ysim_list)):
 
 def get_ysim(self, condition):
     return deepcopy(self.options.simulate(self.position, observables = True, initial_conc = condition[1]))
-"""
+
 def fun(f,q_in,q_out):
     while True:
         i,x = q_in.get()
-        print i, x
+        
         if i is None:
             break
         q_out.put((i,f(x)))
-        print qsize(q_out)
 
 def parmap(f, X, nprocs = mp.cpu_count()):
     q_in   = mp.Queue(1)
@@ -266,9 +265,9 @@ def parmap(f, X, nprocs = mp.cpu_count()):
     sent = [q_in.put((i,x)) for i,x in enumerate(X)]
     [q_in.put((None,None)) for _ in range(nprocs)]
     res = [q_out.get() for _ in range(len(sent))]
-    
+    print "Are you joining?"
     [p.join() for p in proc]
-    
+    print "Yes I am"
     return [x for i,x in sorted(res)]
 
 """Options for defining a bayessb.MCMC project/run.
