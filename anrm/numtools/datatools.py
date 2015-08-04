@@ -240,10 +240,10 @@ class Analysis(object):
 iterate_args = [(k,v) for k, v in self.conditions.iteritems()]
 ysim_list = parmap(lambda i: self.get_ysim(i), iterate_args, nprocs=num_procs)
 for i in range(len(ysim_list)):
-    ysims[iterate_args[i][0]] = ysim_list[i]"""
+    ysims[iterate_args[i][0]] = ysim_list[i]
 
 def get_ysim(self, condition):
-    return deepcopy(self.options.simulate(self.position, observables = True, initial_conc = condition[1]))
+    return deepcopy(self.options.simulate(self.position, observables = True, initial_conc = condition[1]))"""
 
 def fun(f,q_in,q_out):
     while True:
@@ -265,9 +265,7 @@ def parmap(f, X, nprocs = mp.cpu_count()):
     sent = [q_in.put((i,x)) for i,x in enumerate(X)]
     [q_in.put((None,None)) for _ in range(nprocs)]
     res = [q_out.get() for _ in range(len(sent))]
-    print "Are you joining?"
     [p.join() for p in proc]
-    print "Yes I am"
     return [x for i,x in sorted(res)]
 
 """Options for defining a bayessb.MCMC project/run.
