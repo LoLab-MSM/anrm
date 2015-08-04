@@ -92,7 +92,7 @@ class Analysis(object):
         if self.multiprocess:
             print "model outputs", dt.datetime.now() - start
 
-            num_procs = min(mp.cpu_count()-2, len(self.conditions))
+            num_procs = min(mp.cpu_count()-1, len(self.conditions))
             iterate_args = [(k,v) for k, v in self.conditions.iteritems()]
             ysim_list = parmap(lambda i: self.get_ysim(i), iterate_args, nprocs=num_procs)
             for i in range(len(ysim_list)):
@@ -235,13 +235,24 @@ class Analysis(object):
                 ordereddata[i][1].z_scaled = z_scaled[i]
             
             print (ordereddata[i][1].exp_name, ordereddata[i][1].con_name,ordereddata[i][1].observation, ordereddata[i][1].observable, ordereddata[i][1].modelout, ordereddata[i][1].z_scaled)
+"""
+num_procs = min(mp.cpu_count()-1, len(self.conditions))
+iterate_args = [(k,v) for k, v in self.conditions.iteritems()]
+ysim_list = parmap(lambda i: self.get_ysim(i), iterate_args, nprocs=num_procs)
+for i in range(len(ysim_list)):
+    ysims[iterate_args[i][0]] = ysim_list[i]
 
+def get_ysim(self, condition):
+    return deepcopy(self.options.simulate(self.position, observables = True, initial_conc = condition[1]))
+"""
 def fun(f,q_in,q_out):
     while True:
         i,x = q_in.get()
+        print i, x
         if i is None:
             break
         q_out.put((i,f(x)))
+        print qsize(q_out)
 
 def parmap(f, X, nprocs = mp.cpu_count()):
     q_in   = mp.Queue(1)
