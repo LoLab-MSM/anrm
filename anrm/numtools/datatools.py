@@ -236,11 +236,11 @@ class Analysis(object):
             
             print (ordereddata[i][1].exp_name, ordereddata[i][1].con_name,ordereddata[i][1].observation, ordereddata[i][1].observable, ordereddata[i][1].modelout, ordereddata[i][1].z_scaled)
 
-num_procs = min(mp.cpu_count()-1, len(self.conditions))
+"""num_procs = min(mp.cpu_count()-1, len(self.conditions))
 iterate_args = [(k,v) for k, v in self.conditions.iteritems()]
 ysim_list = parmap(lambda i: self.get_ysim(i), iterate_args, nprocs=num_procs)
 for i in range(len(ysim_list)):
-    ysims[iterate_args[i][0]] = ysim_list[i]
+    ysims[iterate_args[i][0]] = ysim_list[i]"""
 
 def get_ysim(self, condition):
     return deepcopy(self.options.simulate(self.position, observables = True, initial_conc = condition[1]))
