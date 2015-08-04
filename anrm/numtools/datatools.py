@@ -264,9 +264,7 @@ def parmap(f, X, nprocs = mp.cpu_count()):
     
     sent = [q_in.put((i,x)) for i,x in enumerate(X)]
     [q_in.put((None,None)) for _ in range(nprocs)]
-    print "Are you joining?"
     res = [q_out.get() for _ in range(len(sent))]
-    print "Yes I am."
     [p.join() for p in proc]
     return [x for i,x in sorted(res)]
 
