@@ -5,8 +5,10 @@ import itertools as itr
 import multiprocessing as mp
 import calibratortools as ct
 
+from scipy import stats
+from scipy.optimize import minimize_scalar
 from copy import deepcopy
-from collections import Counter
+from collections import Counter, defaultdict
 import datetime as dt
 start = dt.datetime.now()
 class Data:
@@ -35,7 +37,8 @@ class Data:
         self.normalize = None
         if data_dict['Normalize_Option']:
             self.normalize = eval(data_dict['Normalize_Option'])
-                
+        self.y_list = []
+        
     def assign_obs_values(self):
         #Chect to see that ysims, xsims not None
         self.signal = ct.extract_records(self.ysim, [self.observable])
@@ -59,6 +62,7 @@ class Analysis(object):
     def run(self):
         self.model_outputs()
         self.scale_data(self.data_list)
+        self.reset_ylist(self.data_list)
     
     def expand_list(self, data_list):
         """Time course data is imported as a list of timepoints and observations. These data
@@ -86,6 +90,9 @@ class Analysis(object):
         conditions = {k: ct.initial_conditions(v.keys(), v.values(), self.ic_params)
                 for k, v in condnames.items()}
         return condnames, conditions
+    def reset_ylist(self, datalist):
+        for d in datalist:
+            d.y_list = []
 
     def model_outputs(self):
         ysims = {}
@@ -105,6 +112,7 @@ class Analysis(object):
         for d in self.data_list:
             d.ysim = ysims[d.con_name]
             d.modelout = d.assign_obs_values()
+            d.y_list.extend(d.modelout)
 
     def get_ysim(self, condition):
         return deepcopy(self.options.simulate(self.position, observables = True, initial_conc = condition[1]))
@@ -124,6 +132,7 @@ class Analysis(object):
         return iterator
     
     def scale_data(self, datalist):
+        print "scale data", dt.datetime.now() - start
         for iterator in self.create_iterator(datalist):
             trimmed_data =  self.trim_data(datalist, type=iterator[0], observable=iterator[1], obs_func=iterator[2], partition=iterator[3])
             if trimmed_data:
@@ -182,16 +191,19 @@ class Analysis(object):
 
     def optimal_scale(self, datalist, type=None):
         if type == 'Nominal':
-            return self.optimal_scale_nominal(datalist)
+            return self.optimal_scale_nominal(datalist, 'Nominal')
         if type == 'Ordinal':
             return self.optimal_scale_ordinal(datalist)
 
-    def optimal_scale_nominal(self, datalist):
+    def optimal_scale_nominal(self, datalist, type = None):
         self.indicator_matrix = self.indicate_matrix(datalist)
         U = self.indicator_matrix
         z = [d.modelout for (i,d) in datalist]
         z_scaled = U*np.matrix.getI(U.T*U)*U.T*z
-        
+        if type == 'Nominal':
+            y_lists  = [d[1].y_list for d in datalist]
+            z_scaled = self.add_gaps(z_scaled, y_lists)
+                                
         for i in range(len(datalist)):
             if z_scaled[i]<0:
                 datalist[i][1].z_scaled = np.asmatrix([0.])
@@ -228,6 +240,9 @@ class Analysis(object):
         
 
         z_scaled = U*np.matrix.getI(U.T*U)*U.T*z
+        y_lists  = [d.y_list for (i,d) in ordereddata]
+        z_scaled = self.add_gaps(z_scaled, y_lists)
+
         for i in range(len(ordereddata)):
             if z_scaled[i]<0:
                 ordereddata[i][1].z_scaled = np.asmatrix([0.])
@@ -236,14 +251,65 @@ class Analysis(object):
             
             print (ordereddata[i][1].exp_name, ordereddata[i][1].con_name,ordereddata[i][1].observation, ordereddata[i][1].observable, ordereddata[i][1].modelout, ordereddata[i][1].z_scaled)
 
-"""num_procs = min(mp.cpu_count()-1, len(self.conditions))
-iterate_args = [(k,v) for k, v in self.conditions.iteritems()]
-ysim_list = parmap(lambda i: self.get_ysim(i), iterate_args, nprocs=num_procs)
-for i in range(len(ysim_list)):
-    ysims[iterate_args[i][0]] = ysim_list[i]
+    def add_gaps(self, z_scaled, y_lists):
+        if len(y_lists[0]) < 2:
+            return z_scaled
+        z_scaled = [round(i, 3) for i in z_scaled]
+        
+        if type == 'Nominal':
+            p_value = 0.025 #two tailed test for x1 =! x2
+        else:
+            p_value = 0.05 #one tailed test for x1 < x2 (i.e. ordinal)
 
-def get_ysim(self, condition):
-    return deepcopy(self.options.simulate(self.position, observables = True, initial_conc = condition[1]))"""
+        z_idx = [(v, i, y_lists[i]) for (i,v) in enumerate(z_scaled)]
+        cat_dict = defaultdict(list)
+        for k,i,v in z_idx:
+            cat_dict[k].extend(v)
+        
+        cat_vars = sorted([(z, np.var(y), len(y)) for (z, y) in cat_dict.items()])
+        
+        if len(cat_vars) <= 1:
+            return [np.array(i) for i in z_scaled]
+        
+        dof = [self.Welch_Satterthwaite_Eq([cat_vars[i][1],cat_vars[i+1][1]], [cat_vars[i][2],cat_vars[i+1][2]]) for i in range(len(cat_vars[:-1]))] #degrees of freedom for Welch's t- test.
+        tstat = [stats.t.ppf(1-p_value, df) for df in dof]
+        pvars = [self.Pooled_Variance([cat_vars[i][1],cat_vars[i+1][1]], [cat_vars[i][2],cat_vars[i+1][2]]) for i in range(len(cat_vars[:-1]))]
+        catgaps = [tstat[i]*pvars[i] for i in range(len(tstat))]
+
+        z_gaps = self.z_with_gaps(catgaps, cat_vars)
+        gaps = [(cat_vars[i][0], z_gaps[i]) for i in range(len(z_gaps))]
+        gaps_dict = dict(gaps)
+        
+        new_z_scaled = []
+        for i in z_scaled:
+            new_z_scaled.append(np.array(gaps_dict[i]))
+        return new_z_scaled
+
+    def Welch_Satterthwaite_Eq(self, var, num):
+        return ((var[0]/num[0] + var[1]/num[1])**2)/((((var[0]/num[0])**2)/(num[0]-1)) + (((var[0]/num[0])**2)/(num[0]-1)))
+        
+    def Pooled_Variance(self, var, num):
+        return np.sqrt((var[0]/num[0]) + (var[1]/num[1]))
+
+    def z_with_gaps(self, catgaps, cat_vars):
+        b  = [max(catgaps[i],(cat_vars[i][0]-cat_vars[i+1][0])) for i in range(len(catgaps))]
+
+        a  = [i[0] for i in cat_vars]
+        x_optimized = minimize_scalar(self.residuals, args = (a, b))
+        x_opt = round(x_optimized.x, 3)
+
+        gaps = [x_optimized.x]
+        gaps_remaining = [x_opt+ np.sum(b[:i+1]) for i in range(len(b))]
+        gaps.extend(gaps_remaining)
+        return gaps
+        
+    def residuals(self, x, a, b):
+        bx_rem = [x+ np.sum(b[:i+1]) for i in range(len(b))]
+        bx  = [x]
+        bx.extend(bx_rem)
+        bx = np.array(bx).T
+        a  = np.array(a)
+        return sum([i**2 for i in a-bx])
 
 def fun(f,q_in,q_out):
     while True:
