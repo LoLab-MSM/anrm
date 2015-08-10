@@ -1,5 +1,6 @@
 # Datatools 1.0 (Irvin et. al 2013) Handles Non-Quantitative Data for ANRM
 
+import math
 import numpy as np
 import itertools as itr
 import multiprocessing as mp
@@ -292,8 +293,11 @@ class Analysis(object):
         return np.sqrt((var[0]/num[0]) + (var[1]/num[1]))
 
     def z_with_gaps(self, catgaps, cat_vars):
+        for i in range(len(catgaps)):
+            if math.isnan(catgaps[i]):
+                catgaps[i] = 0
+        
         b  = [max(catgaps[i],(cat_vars[i+1][0]-cat_vars[i][0])) for i in range(len(catgaps))]
-        print [(catgaps[i], (cat_vars[i][0]-cat_vars[i+1][0])) for i in range(len(catgaps))]
 
         a  = [i[0] for i in cat_vars]
         x_optimized = minimize_scalar(self.residuals, args = (a, b))
