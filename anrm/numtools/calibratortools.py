@@ -66,13 +66,21 @@ def cubic_spline(xsim, ysim, xdata, degree = None):
     return yspline
 
 def calculate_time_delay(signal, tspan):
+    if len(np.shape(signal))!=1:
+        signal = signal[:,0]
+    
     norm_signal = normalize(signal, option = 0)
     
     if np.isnan(np.sum(norm_signal)):
-        return None
+        norm_signal = signal
+        
+    norm_signal = norm_signal.tolist()
+    idx         = norm_signal.index(min(norm_signal, key = lambda x: abs(x-0.5)))
+
+    if len(Counter(norm_signal).keys()) < 5:
+        #There are too few numbers to do interpolation.
+        return np.array([tspan[3]])
     else:
-        norm_signal = norm_signal.tolist()
-        idx         = norm_signal.index(min(norm_signal, key = lambda x: abs(x-0.5)))
         return cubic_spline(norm_signal[idx-3:idx+3], tspan[idx-3:idx+3], [0.5], degree = 3)
 
 def calculate_gain(signal):

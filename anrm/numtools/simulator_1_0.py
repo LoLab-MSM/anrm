@@ -62,7 +62,6 @@ class Settings():
     def copy(self):
         new_options = Settings()
         new_options.__dict__.update(self.__dict__)
-        print new_options
         return new_options
 
 class Solver(object):
@@ -91,6 +90,11 @@ class Solver(object):
         if options.estimate_params is None or not len(options.estimate_params):
             raise Exception("estimate_params must contain a list of parameters")
         return options
+    
+    def copy(self):
+        new_options = Solver(self.options)
+        new_options.__dict__.update(self.__dict__)
+        return new_options
 
     def run(self):
         """Initialize internal state and runs the parameter estimation."""
@@ -156,11 +160,13 @@ class Solver(object):
         if initial_conc is not None:
             yi = np.zeros(len(self.options.model.species))
             
+            explore = {}
             for cp, ic_param in self.options.model.initial_conditions:
                 
                 ii = self.options.model.parameters_initial_conditions().index(ic_param)
                 si = self.options.model.get_species_index(cp)
                 yi[si] = initial_conc[ii]
+
             self.solver.run(self.cur_params(position), yi)
         else:
             self.solver.run(self.cur_params(position))
@@ -169,7 +175,6 @@ class Solver(object):
             return self.solver.yobs
         else:
             return self.solver.y
-
 
     def cur_params(self, position=None):
         """Return a list of the values of all model parameters.
@@ -197,7 +202,6 @@ class Solver(object):
             # position and inverting the log transform
         values[self.estimate_idx] = np.power(10, position)
         return values
-
 """
     TODO
     assign all the variables that will be used in the simulator
