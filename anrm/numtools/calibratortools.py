@@ -80,3 +80,7 @@ def calculate_gain(signal):
 
 def timepoints(signal, timepoints):
     return cubic_spline(xsim, ysim, timepoints)
+
+def selector(signal, function, obs_idx):
+    function = eval(function)
+    return function(signal, obs_idx)
