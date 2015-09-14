@@ -83,12 +83,13 @@ def calculate_time_delay(signal, tspan):
     else:
         return cubic_spline(norm_signal[idx-3:idx+3], tspan[idx-3:idx+3], [0.5], degree = 3)
 
-def calculate_gain(signal):
+def calculate_gain(signal, tspan):
     return signal[-1]
 
-def timepoints(signal, timepoints):
-    return cubic_spline(xsim, ysim, timepoints)
+def timepoints(signal, timepoints, tspan):
+    return cubic_spline(tspan, signal, timepoints)
 
-def selector(signal, function, obs_idx):
-    function = eval(function)
-    return function(signal, obs_idx)
+def selector(signal, f_input, tspan):
+    signal_index = f_input[1]
+    function = eval(f_input[0])
+    return np.array([function(signal[:,signal_index], tspan)])

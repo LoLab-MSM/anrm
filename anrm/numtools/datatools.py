@@ -17,9 +17,9 @@ class Data:
         self.exp_name = data_dict['Experiment_Name']
         self.con_name = data_dict['Condition_Name']
         self.initials = eval(data_dict['Initial_Condition'])
+        self.type = data_dict['Type']
         self.observable = data_dict['Observable']
         self.observation = data_dict['Observation']
-        self.type = data_dict['Type']
         self.ordrank = [i.strip() for i in data_dict['Category_Rank'].split(',')]
         self.partition = eval(data_dict['Partition'])
         self.adj_observation = data_dict['Adjusted_Observation']
@@ -42,11 +42,13 @@ class Data:
         
     def assign_obs_values(self):
         #Chect to see that ysims, xsims not None
-        self.signal = ct.extract_records(self.ysim, [self.observable])
+        self.signal = ct.extract_records(self.ysim, [i.strip() for i in self.observable.split(',')])
         if self.normalize:
             self.signal = ct.normalize(self.signal, option = self.normalize)
     
         if self.obs_func_input:
+            if self.type == 'Quantitative':
+                print max(self.signal)
             return self.obs_func(self.signal, self.obs_func_input, self.tspan)
         else:
             return self.obs_func(self.signal, self.tspan)
@@ -63,7 +65,7 @@ class Analysis(object):
     def run(self):
         self.model_outputs()
         self.scale_data(self.data_list)
-        self.reset_ylist(self.data_list)
+        #self.reset_ylist(self.data_list) #growing list of y for computing variances
     
     def expand_list(self, data_list):
         """Time course data is imported as a list of timepoints and observations. These data
@@ -76,6 +78,7 @@ class Analysis(object):
                 observations = deepcopy(d.observation)
                 d.obs_func_input = [inputs[0]]
                 d.observation = observations.split(',')[0].strip()
+                
                 for i in range(len(inputs[1:])):
                     new_datum = deepcopy(d)
                     new_datum.obs_func_input = [inputs[i+1]]
@@ -91,8 +94,8 @@ class Analysis(object):
         conditions = {k: ct.initial_conditions(v.keys(), v.values(), self.ic_params)
                 for k, v in condnames.items()}
         return condnames, conditions
-    def reset_ylist(self, datalist):
-        for d in datalist:
+    def reset_ylist(self):
+        for d in self.data_list:
             d.y_list = []
 
     def model_outputs(self):
@@ -195,6 +198,13 @@ class Analysis(object):
             return self.optimal_scale_nominal(datalist, 'Nominal')
         if type == 'Ordinal':
             return self.optimal_scale_ordinal(datalist)
+        if type == 'Quantitative':
+            return self.quantitative_data(datalist)
+
+    def quantitative_data(self, datalist):
+        z_scaled = [float(d.observation) for (i,d) in datalist]
+        for i in range(len(datalist)):
+            datalist[i][1].z_scaled = np.asmatrix([z_scaled[i]])
 
     def optimal_scale_nominal(self, datalist, type = None):
         self.indicator_matrix = self.indicate_matrix(datalist)
